@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokedle</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" >
+</head>
+<body>
+    <section id="logo">
+    <img src="logo.png" width="260px"> 
+    </section>
+    <section id="principal">
+        <section id="Pokemon1">
+        </section>
+        <section id="Pokemon2">
+        </section>
+        <section id="Pokemon3">
+        </section>
+        <section id="Pokemon4">
+        </section>
+        <section id="Pokemon5">
+        </section>
+    </section>
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true" data-bs-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header  bg-azul text-white">
+        <h5 class="modal-title" id="errorModalLabel">Error</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        El Pokémon ingresado no existe. Intentalo de nuevo.
+      </div>
+    </div>
+  </div>
+</div>
+ <div class="modal fade " id="modalFinal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true" data-bs-backdrop="false">
+  <div class="modal-dialog modal-dialog-centered modalAlto">
+    <div class="modal-content">
+      <div class="modal-header  bg-azul text-white fondoVerde">
+        <h5 class="modal-title"  id="tituloFinal"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body" id="mensajeFinal">
+      </div>
+    </div>
+  </div>
+</div>
+<section id="principalPistas">
+<section id="contenedorPrincipal">
+<section id="TituloPistas"> <h3 id="tituloPistas"> Pistas</h3></section>
+<section id="pistas">
+<section id="contenedorPista1">
+<p id="pista1"> pista 1: Tipos </p>
+<p id="fallo1">  fallos restantes: 2</p>
+</section>
+<section id="contenedorPista2">
+<p id="pista2"> pista 2: EtapaEvolutiva </p>
+<p id="fallo2">  fallos restantes: 3</p>
+</section>
+<section id="contenedorPista3">
+<p id="pista3"> pista 3: Generacion </p>
+<p id="fallo3">  fallos restantes: 4</p>
+</section>
+</section>
+</section>
+</section>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="Pokedle.js"></script>
+</body>
+</html>
