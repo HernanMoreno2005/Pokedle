@@ -6,7 +6,8 @@ export const variables = {
     Pokemon3: document.getElementById("Pokemon3"),
     Pokemon4: document.getElementById("Pokemon4"),
     Pokemon5: document.getElementById("Pokemon5"),
-
+    pokemonPuestos: [],
+    pokemonPuestosDiario:[],
     pista1: document.getElementById("pista1"),
     pista2: document.getElementById("pista2"),
     pista3: document.getElementById("pista3"),
@@ -35,6 +36,7 @@ export const variables = {
     nombre: null,
     adivinoPokemon: false,
     existeEspacio: false,
+    guardarEnArray: true,
 
     modalHeader: document.querySelector("#modalFinal .modal-header"),
     modalEl: document.getElementById('errorModal'),
@@ -70,7 +72,27 @@ export const variables = {
         steel: { nombre: "Acero", color: "#b8b8d0" },
     }
 };
-// Inicializamos los modales
+// Encriptar
+function toBase64(str) {
+    const bytes = new TextEncoder().encode(str); // convierte a Uint8Array
+    let binary = '';
+    bytes.forEach((b) => binary += String.fromCharCode(b));
+    return btoa(binary);
+}
+
+// Desencriptar
+function fromBase64(str) {
+    const binary = atob(str);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+    }
+    return new TextDecoder().decode(bytes);
+}
+
+
+
+// Inicializar los modales
 variables.modal = new bootstrap.Modal(variables.modalEl, { focus: false });
 variables.modalFinal = new bootstrap.Modal(variables.modalFinalE2);
 
@@ -97,9 +119,11 @@ for (let i = 1; i <= 1025; i++) {
         variables.tipos = data.types.map(t => t.type.name);
         variables.generacion = dataEspecies.generation.name;
         variables.etapaEvolutiva = buscarEtapa(evolucionData.chain, variables.nombre);
-
+        localStorage.setItem("nombre", toBase64(variables.nombre));
+        localStorage.setItem("tipos", toBase64(JSON.stringify(variables.tipos)));
+        localStorage.setItem("generacion", toBase64(variables.generacion));
+        localStorage.setItem("etapaEvolutiva", toBase64(variables.etapaEvolutiva));
         crearCuadrados(variables.nombre);
-
         if (variables.inputs1.length > 0) {
             actualizarFilasActivas();
             variables.inputsTotales[0][0].focus();
@@ -109,7 +133,11 @@ for (let i = 1; i <= 1025; i++) {
         console.error("Error al obtener el Pokémon:", error);
     }
 }
-
+async function obtenerPokemonNombre(nombre){
+  const respuesta = await fetch(`https://pokeapi.co/api/v2/pokemon/${nombre}`);
+  const data = await respuesta.json();
+  variables.sprite = data.sprites.front_default;
+}
 export function navegacionEntreLetras(){
        variables.inputsTotales.forEach((fila, filaIndex) => {
             fila.forEach((input, j) => {
@@ -195,20 +223,33 @@ export function buscarEtapa(chain, nombreBuscado, etapaActual = 1) {
 export function actualizarFilasActivas() {
     if (variables.adivinoPokemon) {
         variables.inputsTotales.forEach((fila) => fila.forEach(input => input.disabled = true));
-        console.log("llegue aca");
     } else {
         variables.inputsTotales.forEach((fila, filaIndex) => {
             fila.forEach(input => input.disabled = filaIndex !== variables.contadorPalabras);
         });
     }
 }
-
 // Iniciar
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async() => {
   const modo = localStorage.getItem("modoJuego");
-
-  if (modo === "infinito") {
+  const final = localStorage.getItem("final");
+  if (modo === "infinito" && (final == "true" || final === null)) {
     obtenerPokemon();
+    localStorage.setItem("final", "false"); 
+  }
+  else if (modo === "infinito"){
+variables.nombre = fromBase64(localStorage.getItem("nombre"));
+variables.tipos = JSON.parse(fromBase64(localStorage.getItem("tipos")));
+variables.generacion = fromBase64(localStorage.getItem("generacion"));
+variables.etapaEvolutiva = fromBase64(localStorage.getItem("etapaEvolutiva"));
+    obtenerPokemonNombre(variables.nombre);
+    crearCuadrados(variables.nombre);
+    actualizarFilasActivas();
+    navegacionEntreLetras()
+let palabrasUsadas = parseInt(localStorage.getItem("contadorPalabras")) || 0;
+variables.pokemonPuestos = JSON.parse(localStorage.getItem("pokemonPuestos")) || [];
+variables.guardarEnArray = false;
+pokemonUsados(palabrasUsadas,variables.pokemonPuestos,"infinito");
   }
 });
 document.addEventListener('keydown', function(event) {
@@ -217,6 +258,31 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
+export async function  pokemonUsados(palabrasUsadas,lista,modo){
+let largo = variables.nombre.length;
+let palabra
+for (let i = 0; i < palabrasUsadas; i++) {
+  if(modo == "infinito"){
+    palabra = variables.pokemonPuestos[i];
+  }
+  else{
+    palabra = variables.pokemonPuestosDiario[i];
+  }
+  for (let j = 0; j < palabra.length; j++) {
+    let pos = i * largo + j;
+    let letraInput = document.querySelector(`.letra.pos${pos}`);
+    if (letraInput) letraInput.value = palabra[j];
+  }
+await analizarPokemon(variables.nombre); 
+if(modo == "diario"){
+  const contadorOriginal = variables.contadorPalabras;
+        variables.contadorPalabras = i;  
+        await analizarPokemon(variables.nombre);
+        variables.contadorPalabras = contadorOriginal;
+}
+}
+variables.guardarEnArray = true;
+}
  export async function analizarPokemon(nombre) {
   const letras = [];
   variables.letrasPokemons = contarLetras(nombre);
@@ -234,7 +300,6 @@ document.addEventListener('keydown', function(event) {
 
   let palabra = letras.join("");
   variables.existeEspacio = letras.includes("");
-
   try {
     const respuesta = await fetch(`https://pokeapi.co/api/v2/pokemon/${palabra}`);
     if (!respuesta.ok) {
@@ -244,6 +309,15 @@ document.addEventListener('keydown', function(event) {
     }
 
     if (!variables.existeEspacio) {
+      let modo = localStorage.getItem("modoJuego"); 
+      if(variables.guardarEnArray && modo == "infinito"){
+        variables.pokemonPuestos.push(palabra);
+        localStorage.setItem(`pokemonPuestos`,JSON.stringify(variables.pokemonPuestos));
+      }
+      else if (variables.guardarEnArray && modo == "diario"){
+        variables.pokemonPuestosDiario.push(palabra);
+        localStorage.setItem(`pokemonPuestosDiario`,JSON.stringify(variables.pokemonPuestosDiario));
+      }
       // verificar letras y posiciones
       for (let i = 0; i < nombre.length; i++) {
         let letraInput;
@@ -289,8 +363,9 @@ document.addEventListener('keydown', function(event) {
         img.style.width = "50%";
         variables.mensajeFinal.appendChild(revelar);
         variables.mensajeFinal.appendChild(img);
-
         variables.modalFinal.show();
+        localStorage.setItem("contadorPalabras",0);
+        localStorage.setItem("final", "true");
         variables.adivinoPokemon = true;
 
         if (variables.contadorVerdes === palabra.length) {
@@ -300,6 +375,7 @@ document.addEventListener('keydown', function(event) {
           variables.tituloFinal.textContent = "Perdiste";
           variables.modalHeader.style.backgroundColor = "#e20b0bff";
         }
+        localStorage.setItem("pokemonPuestos","");
       } else {
         variables.contadorVerdes = 0;
         if (variables.inputsTotales[variables.contadorPalabras + 1])
@@ -307,6 +383,12 @@ document.addEventListener('keydown', function(event) {
       }
 
       variables.contadorPalabras++;
+      if(modo == "infinito"){
+        localStorage.setItem("contadorPalabras",variables.contadorPalabras);
+      }
+      else{
+        localStorage.setItem("ContadorPalabrasDiario",variables.contadorPalabras);
+      }
 
       //  Revelar pista 1
       if (variables.contadorPalabras === 2 && !variables.revelacionPista1) {
@@ -321,7 +403,7 @@ document.addEventListener('keydown', function(event) {
         variables.contenedor1.style.backgroundColor = "#00405c";
         variables.contenedor1.style.cursor = "pointer";
 
-        const tiposSeparados = variables.tipos.map(t => t.type ? t.type.name : t); // seguro
+        const tiposSeparados = variables.tipos.map(t => t.type ? t.type.name : t); 
         const tipo1 = tiposSeparados[0].trim();
         const color1 = variables.tiposArray[tipo1].color;
         const nombreTipo1 = variables.tiposArray[tipo1].nombre;

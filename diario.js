@@ -1,5 +1,5 @@
 localStorage.setItem("modoJuego", "diario"); 
-import {crearCuadrados,variables,actualizarFilasActivas,contarLetras,buscarEtapa,navegacionEntreLetras, analizarPokemon} from "./Pokedle.js";
+import {crearCuadrados,variables,actualizarFilasActivas,contarLetras,buscarEtapa,navegacionEntreLetras, analizarPokemon,pokemonUsados} from "./Pokedle.js";
   
 // Genera un  pokemon dependiendo la fecha.
 function numeroDiario() {
@@ -34,8 +34,16 @@ async function obtenerPokemonDiario() {
 
 //iniciar
 document.addEventListener("DOMContentLoaded", async () => {
-    await obtenerPokemonDiario();   
+    let contadorPalabras = parseInt(localStorage.getItem("ContadorPalabrasDiario")) || 0;
+    if(contadorPalabras){
+        variables.contadorPalabras = contadorPalabras;
+    }
+    await obtenerPokemonDiario();
     crearCuadrados(variables.nombre);
+    variables.pokemonPuestosDiario =  JSON.parse(localStorage.getItem("pokemonPuestosDiario")) || []
+    console.log(variables.contadorPalabras);
+    console.log(variables.pokemonPuestosDiario);
+    await pokemonUsados(variables.contadorPalabras,variables.pokemonPuestosDiario,"diario");
     navegacionEntreLetras();
     actualizarFilasActivas();
     analizarPokemon(variables.nombre);

@@ -19,7 +19,7 @@ cerrar.addEventListener("click", () => {
   }, DUR);
 });
 
-// CLICK AFUERA
+
 window.addEventListener("click", e => {
   if (e.target === modal) {
     modal.classList.add("hideRight");
