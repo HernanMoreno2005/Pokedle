@@ -1,6 +1,6 @@
 localStorage.setItem("modoJuego", "diario"); 
-import {crearCuadrados,variables,actualizarFilasActivas,contarLetras,buscarEtapa,navegacionEntreLetras, analizarPokemon,pokemonUsados} from "./Pokedle.js";
-  
+import {crearCuadrados,variables,actualizarFilasActivas,contarLetras,buscarEtapa,navegacionEntreLetras, analizarPokemon,pokemonUsados,toBase64,fromBase64} from "./Pokedle.js";
+let cambioPokemon = false;
 // Genera un  pokemon dependiendo la fecha.
 function numeroDiario() {
     const hoy = new Date();
@@ -27,6 +27,17 @@ async function obtenerPokemonDiario() {
         const evolucionData = await respuestaCadena.json();
 
         variables.nombre = data.name.toLowerCase();
+        let nombreDecodificado= fromBase64(localStorage.getItem("pokemonDiario"));
+       if(nombreDecodificado != variables.nombre){
+         let nombreEncriptado = toBase64(variables.nombre);
+         localStorage.setItem("pokemonDiario",nombreEncriptado);
+         localStorage.removeItem("pokemonPuestosDiario");
+         localStorage.setItem("ContadorPalabrasDiario", 0);
+       }
+       else if( localStorage.getItem(localStorage.getItem("pokemonDiario"))=== null){
+           let nombreEncriptado = toBase64(variables.nombre);
+         localStorage.setItem("pokemonDiario",nombreEncriptado);
+       }
         variables.tipos = data.types.map(t => t.type.name);
         variables.generacion = dataEspecies.generation.name;
         variables.etapaEvolutiva = buscarEtapa(evolucionData.chain, variables.nombre);
@@ -34,16 +45,20 @@ async function obtenerPokemonDiario() {
 
 //iniciar
 document.addEventListener("DOMContentLoaded", async () => {
-    let contadorPalabras = parseInt(localStorage.getItem("ContadorPalabrasDiario")) || 0;
+   
+    await obtenerPokemonDiario();
+     let contadorPalabras = parseInt(localStorage.getItem("ContadorPalabrasDiario")) || 0;
     if(contadorPalabras){
         variables.contadorPalabras = contadorPalabras;
     }
-    await obtenerPokemonDiario();
     crearCuadrados(variables.nombre);
-    variables.pokemonPuestosDiario =  JSON.parse(localStorage.getItem("pokemonPuestosDiario")) || []
-    console.log(variables.contadorPalabras);
-    console.log(variables.pokemonPuestosDiario);
-    await pokemonUsados(variables.contadorPalabras,variables.pokemonPuestosDiario,"diario");
+    console.log(variables.nombre);
+    console.log(contadorPalabras);
+    if(contadorPalabras > 0){
+        variables.pokemonPuestosDiario = JSON.parse(localStorage.getItem("pokemonPuestosDiario")) || []
+        await pokemonUsados(variables.contadorPalabras,variables.pokemonPuestosDiario,"diario");
+    }
+    console.log("entre aca");
     navegacionEntreLetras();
     actualizarFilasActivas();
     analizarPokemon(variables.nombre);

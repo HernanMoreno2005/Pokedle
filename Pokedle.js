@@ -73,15 +73,15 @@ export const variables = {
     }
 };
 // Encriptar
-function toBase64(str) {
-    const bytes = new TextEncoder().encode(str); // convierte a Uint8Array
+export function toBase64(str) {
+    const bytes = new TextEncoder().encode(str);
     let binary = '';
     bytes.forEach((b) => binary += String.fromCharCode(b));
     return btoa(binary);
 }
 
 // Desencriptar
-function fromBase64(str) {
+export function fromBase64(str) {
     const binary = atob(str);
     const bytes = new Uint8Array(binary.length);
     for (let i = 0; i < binary.length; i++) {
@@ -158,48 +158,69 @@ export function navegacionEntreLetras(){
             });
         });
 }
+
+// Función para detectar si es un dispositivo móvil
+function esDispositivoMovil() {
+  return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+}
 // Crear inputs
 export function crearCuadrados(nombre) {
   variables.inputs1 = [];
-    variables.inputs2 = [];
-    variables.inputs3 = [];
-    variables.inputs4 = [];
-    variables.inputs5 = [];
-    variables.inputsTotales = [];
-    for (let i = 0; i < nombre.length; i++) {
-        const contenedor = document.createElement("input");
-        contenedor.classList.add("letra", `pos${i}`);
-        contenedor.maxLength = 1;
-        variables.Pokemon1.appendChild(contenedor);
-        variables.inputs1.push(contenedor);
+  variables.inputs2 = [];
+  variables.inputs3 = [];
+  variables.inputs4 = [];
+  variables.inputs5 = [];
+  variables.inputsTotales = [];
 
-        const copia = contenedor.cloneNode(true);
-        const copia2 = contenedor.cloneNode(true);
-        const copia3 = contenedor.cloneNode(true);
-        const copia4 = contenedor.cloneNode(true);
+  const esMovil = esDispositivoMovil(); 
 
-        copia.classList.replace(`pos${i}`, `pos${i + nombre.length}`);
-        copia2.classList.replace(`pos${i}`, `pos${i + 2 * nombre.length}`);
-        copia3.classList.replace(`pos${i}`, `pos${i + 3 * nombre.length}`);
-        copia4.classList.replace(`pos${i}`, `pos${i + 4 * nombre.length}`);
+  for (let i = 0; i < nombre.length; i++) {
+    // Crear input principal
+    const contenedor = document.createElement("input");
+    contenedor.classList.add("letra", `pos${i}`);
+    contenedor.maxLength = 1;
+    contenedor.readOnly = esMovil; 
+    variables.Pokemon1.appendChild(contenedor);
+    variables.inputs1.push(contenedor);
 
-        variables.Pokemon2.appendChild(copia);
-        variables.Pokemon3.appendChild(copia2);
-        variables.Pokemon4.appendChild(copia3);
-        variables.Pokemon5.appendChild(copia4);
+    // Crear copias
+    const copia = contenedor.cloneNode(true);
+    const copia2 = contenedor.cloneNode(true);
+    const copia3 = contenedor.cloneNode(true);
+    const copia4 = contenedor.cloneNode(true);
 
-        variables.inputs2.push(copia);
-        variables.inputs3.push(copia2);
-        variables.inputs4.push(copia3);
-        variables.inputs5.push(copia4);
-    }
+    // Cambiar clases
+    copia.classList.replace(`pos${i}`, `pos${i + nombre.length}`);
+    copia2.classList.replace(`pos${i}`, `pos${i + 2 * nombre.length}`);
+    copia3.classList.replace(`pos${i}`, `pos${i + 3 * nombre.length}`);
+    copia4.classList.replace(`pos${i}`, `pos${i + 4 * nombre.length}`);
 
-    variables.inputsTotales.push(variables.inputs1);
-    variables.inputsTotales.push(variables.inputs2);
-    variables.inputsTotales.push(variables.inputs3);
-    variables.inputsTotales.push(variables.inputs4);
-    variables.inputsTotales.push(variables.inputs5);
+    // Aplicar readonly a las copias solo en móviles
+    copia.readOnly = esMovil;
+    copia2.readOnly = esMovil;
+    copia3.readOnly = esMovil;
+    copia4.readOnly = esMovil;
+
+    // Agregar al DOM
+    variables.Pokemon2.appendChild(copia);
+    variables.Pokemon3.appendChild(copia2);
+    variables.Pokemon4.appendChild(copia3);
+    variables.Pokemon5.appendChild(copia4);
+
+    // Guardar en arrays
+    variables.inputs2.push(copia);
+    variables.inputs3.push(copia2);
+    variables.inputs4.push(copia3);
+    variables.inputs5.push(copia4);
+  }
+
+  variables.inputsTotales.push(variables.inputs1);
+  variables.inputsTotales.push(variables.inputs2);
+  variables.inputsTotales.push(variables.inputs3);
+  variables.inputsTotales.push(variables.inputs4);
+  variables.inputsTotales.push(variables.inputs5);
 }
+
 
 // Funciones auxiliares
 export function contarLetras(nombre) {
@@ -229,6 +250,10 @@ export function actualizarFilasActivas() {
         });
     }
 }
+let inputActivo = null;
+
+
+
 // Iniciar
 document.addEventListener("DOMContentLoaded", async() => {
   const modo = localStorage.getItem("modoJuego");
@@ -252,11 +277,50 @@ variables.guardarEnArray = false;
 pokemonUsados(palabrasUsadas,variables.pokemonPuestos,"infinito");
   }
 });
+// teclado virtual
+const teclas = document.querySelectorAll(".key");
+
+
+teclas.forEach(tecla => {
+    tecla.addEventListener("mousedown", e => e.preventDefault());
+
+    tecla.addEventListener("click", () => {
+        const foco = document.activeElement;
+
+        if (!foco || foco.tagName !== "INPUT") return;
+
+        const key = tecla.dataset.key;
+
+        if (key) {
+            foco.value = key.toUpperCase(); 
+            foco.dispatchEvent(new Event("input", { bubbles: true }));
+
+        } else if (tecla.textContent === "⌫") {
+            foco.value = "";
+            const fila = variables.inputsTotales.find(f => f.includes(foco));
+    const j = fila.indexOf(foco);
+
+    foco.value = "";
+
+
+    foco.dispatchEvent(new Event("input", { bubbles: true }));
+
+
+    if (fila[j - 1]) fila[j - 1].focus();
+            foco.dispatchEvent(new Event("input", { bubbles: true }));
+        }
+    });
+});
+
+
 document.addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
         analizarPokemon(variables.nombre);
     }
 });
+document.getElementById("enter").addEventListener('click', () =>{
+  analizarPokemon(variables.nombre);
+})
 
 export async function  pokemonUsados(palabrasUsadas,lista,modo){
 let largo = variables.nombre.length;
@@ -283,6 +347,8 @@ if(modo == "diario"){
 }
 variables.guardarEnArray = true;
 }
+
+
  export async function analizarPokemon(nombre) {
   const letras = [];
   variables.letrasPokemons = contarLetras(nombre);
@@ -333,6 +399,11 @@ variables.guardarEnArray = true;
 
         if (letras[i] === letra) {
           letraInput.style.backgroundColor = "#77fb77";
+          let  letraTeclado = document.querySelector(`[data-key="${letras[i]}"]`);
+          letraTeclado.classList.add("verde");
+          if(letraTeclado.classList.contains("verde") || letraTeclado.classList.contains("amarillo")){
+            letraTeclado.classList.remove("rojo","amarillo");
+          }
           variables.contadorVerdes++;
           if (variables.letrasPokemons[letras[i]] !== 0) {
             variables.letrasPokemons[letras[i]]--;
@@ -343,6 +414,13 @@ variables.guardarEnArray = true;
         } else if (nombre.includes(letras[i])) {
           if (variables.letrasPokemons[letras[i]] !== 0) {
             letraInput.style.backgroundColor = "#f9f965";
+            let  letraTeclado = document.querySelector(`[data-key="${letras[i]}"]`);
+            if (!letraTeclado.classList.contains("verde")){
+              letraTeclado.classList.add("amarillo")
+            }
+            if(letraTeclado.classList.contains("rojo")){
+              letraTeclado.classList.remove("rojo");
+            }
             variables.amarillas.push(letraInput);
             variables.letrasPokemons[letras[i]]--;
           } else {
@@ -350,6 +428,10 @@ variables.guardarEnArray = true;
           }
         } else {
           letraInput.style.backgroundColor = "#bb2323";
+          let  letraTeclado = document.querySelector(`[data-key="${letras[i]}"]`);
+          if(!letraTeclado.classList.contains("verde") && !letraTeclado.classList.contains("amarillo")){
+              letraTeclado.classList.add("rojo");
+          }
         }
       }
 
@@ -396,7 +478,8 @@ variables.guardarEnArray = true;
         revelarPista1.setAttribute("id", "primerTipo");
         revelarPista1.textContent = "Revelar Pista";
         revelarPista1.style.color = "white";
-        revelarPista1.style.fontSize = "100%"
+        revelarPista1.style.fontSize = "79%"
+        revelarPista1.style.marginBottom = 0;
 
         variables.pista1.style.display = "none";
         variables.fallo1.style.display = "none";
@@ -420,7 +503,7 @@ variables.guardarEnArray = true;
         variables.revelacionPista1 = true;
 
         variables.contenedor1.addEventListener("click", () => {
-          variables.contenedor1.style.width = "206px";
+          variables.contenedor1.style.width = "30vh";
           revelarPista1.textContent = nombreTipo1;
           revelarPista1.style.color = "black";
           variables.contenedor1.style.textAlign = "center";
@@ -432,10 +515,10 @@ variables.guardarEnArray = true;
             revelarPista1.style.backgroundColor = color1;
             revelarPista1.style.width = "50%";
             revelarPista1.style.margin = 0;
-            revelarPista1.style.fontSize = "100%";
+            revelarPista1.style.fontSize = "79%";
             segundoTipo.style.width = "50%";
             segundoTipo.style.margin = 0;
-            segundoTipo.style.fontSize = "100%";
+            segundoTipo.style.fontSize = "79%";
             variables.contenedor1.appendChild(segundoTipo);
             variables.contenedor1.style.display = "flex";
           } else {
@@ -449,8 +532,8 @@ variables.guardarEnArray = true;
         const revelarPista2 = document.createElement("h3");
         revelarPista2.textContent = "Revelar Pista";
         revelarPista2.style.color = "white";
-        revelarPista2.style.fontSize = "100%"; 
-
+        revelarPista2.style.fontSize = "79%"; 
+        revelarPista2.style.marginBottom = 0;
         variables.pista2.style.display = "none";
         variables.fallo2.style.display = "none";
         variables.contenedor2.style.backgroundColor = "#00405c";
@@ -460,7 +543,6 @@ variables.guardarEnArray = true;
         variables.revelacionPista2 = true;
 
         variables.contenedor2.addEventListener("click", () => {
-          variables.contenedor2.style.width = "206px";
           variables.contenedor2.style.backgroundColor = "white";
           revelarPista2.textContent = variables.etapaEvolutiva;
           revelarPista2.style.color = "black";
@@ -474,7 +556,8 @@ variables.guardarEnArray = true;
         const revelarPista3 = document.createElement("h3");
         revelarPista3.textContent = "Revelar Pista";
         revelarPista3.style.color = "white";
-        revelarPista3.style.fontSize = "100%"
+        revelarPista3.style.fontSize = "79%";
+        revelarPista3.style.marginBottom = 0;
 
         variables.pista3.style.display = "none";
         variables.fallo3.style.display = "none";
@@ -485,7 +568,7 @@ variables.guardarEnArray = true;
         variables.revelacionPista3 = true;
 
         variables.contenedor3.addEventListener("click", () => {
-          variables.contenedor3.style.width = "206px";
+          variables.contenedor3.style.width = "30vh";
           variables.contenedor3.style.backgroundColor = "white";
           revelarPista3.textContent = variables.generacion;
           revelarPista3.style.color = "black";
