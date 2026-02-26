@@ -1,7 +1,6 @@
 const modal = document.getElementById("modal");
 const abrir = document.getElementById("abrirModal");
 const cerrar = document.getElementById("cerrarModal");
-
 const DUR = 350; 
 
 

@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="pokebola.png">
-    <title>Pokedle Diario</title>
+    <title>Adivina el pokemon</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="AdivinaPokemon.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" >
 </head>
 <body>
@@ -19,12 +20,12 @@
   <svg xmlns="http://www.w3.org/2000/svg"  id="cerrarModal" width="40" height="40" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
   <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
 </svg>
-</section>
+</section> 
 <a id="home" href="index.html"> <h3>Pokedle</h3></a>
   <img src="tituloMiniJuegos.png" width="80%" style="margin-bottom: 5%;">
     <section id="minijuegos">
+    <a href="diario.html"class="minijuego" > Clasic Pokedle Diario</a>
     <a href="infinito.html"class="minijuego" > Clasic Pokedle Infinito</a>
-    <a href="AdivinaElPokemon.html"class="minijuego" > Adivina el Pokemon</a>
     </section>
   </div>
 </div>
@@ -38,60 +39,14 @@
     <div id="tituloInfo"><h2>Informacion</h2></div>
     <p>Diviertete completando todos los minijuegos sobre pokemon.</p>
     <p>Pokedle fue creado utilizando recursos que son propiedad de The Pokemon company,empresa que no respalda ni patrocina este proyecto.</p>
-    <p>Juego inspirado en <a href="https://wordleespanol.org/">wordle</a></p>
+    <p>Juego inspirado en <a href="https://overwatchdle.vercel.app/" >Overwatchdle</a></p>
   </div>
   <div id="contacto">
   <p>  Contacto: <a href="mailto:beron361@gmail.com"> beron361@gmail.com</a></p>  
   </div>
 </div>
 </div>
-    <section id="logo">
-    <img src="logoDiario.png" width="300px"> 
-    </section>
-    <section id="principalPistas">
-<section id="contenedorPrincipal">
-<section id="TituloPistas"> <h3 id="tituloPistas"> Pistas</h3></section>
-<section id="pistas">
-<section id="contenedorPista1">
-<p id="pista1"> pista 1: Tipos </p>
-<p id="fallo1">  fallos restantes: 2</p>
-</section>
-<section id="contenedorPista2">
-<p id="pista2"> pista 2: Etapa Evolutiva </p>
-<p id="fallo2">  fallos restantes: 3</p>
-</section>
-<section id="contenedorPista3">
-<p id="pista3"> pista 3: Generacion </p>
-<p id="fallo3">  fallos restantes: 4</p>
-</section>
-</section>
-</section>
-</section>
-    <section id="principal">
-        <section id="Pokemon1">
-        </section>
-        <section id="Pokemon2">
-        </section>
-        <section id="Pokemon3">
-        </section>
-        <section id="Pokemon4">
-        </section>
-        <section id="Pokemon5">
-        </section>
-    </section>
-    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true" data-bs-backdrop="false">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header  bg-azul text-white">
-        <h5 class="modal-title" id="errorModalLabel">Error</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-body">
-        El Pokémon ingresado no existe. Intentalo de nuevo.
-      </div>
-    </div>
-  </div>
-</div>
+<main>
  <div class="modal fade " id="modalFinal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true" data-bs-backdrop="false">
   <div class="modal-dialog modal-dialog-centered modalAlto">
     <div class="modal-content">
@@ -104,54 +59,48 @@
     </div>
   </div>
 </div>
-<div class="keyboard">
-<div class="fila">
-<div class="key" data-key="q">Q</div>
-<div class="key" data-key="w">W</div>
-<div class="key" data-key="e">E</div>
-<div class="key" data-key="r">R</div>
-<div class="key" data-key="t">T</div>
-<div class="key" data-key="y">Y</div>
-<div class="key" data-key="u">U</div>
-<div class="key" data-key="i">I</div>
-<div class="key" data-key="o">O</div>
-<div class="key" data-key="p">P</div>
-</div>
-<div class="fila" style="margin-left: 20px;">
-<div class="key" data-key="a">A</div>
-<div class="key" data-key="s">S</div>
-<div class="key" data-key="d">D</div>
-<div class="key" data-key="f" >F</div>
-<div class="key" data-key="g">G</div>
-<div class="key" data-key="h">H</div>
-<div class="key" data-key="j">J</div>
-<div class="key" data-key="k">K</div>
-<div class="key" data-key="l">L</div>
-</div>
-<div class="fila">
-<div class="key" data-key="z">Z</div>
-<div class="key" data-key="x">X</div>
-<div class="key" data-key="c">C</div>
-<div class="key" data-key="v">V</div>
-<div class="key" data-key="b">B</div>
-<div class="key" data-key="n">N</div>
-<div class="key" data-key="m">M</div>
-<div class="key" data-key="-">-</div>
-<div class="key big">⌫</div>
-<div class="key big" id = "enter">ENTER</div>
-</div>
-</div>
+    <div id ="logo">
+    <img src="logoAdivinaElpokemon.png" width="300px">
+    </div>
+    <div id="contenedorTotal">
+ <div class="app">
+    <div class="search-container">
+      <input 
+        type="text" 
+        id="busqueda"
+        placeholder="Escribe un Pokémon..."
+        autocomplete="off"
+      />
+      <div id="results" class="results"></div>
+    </div>
+    <div id="selected-pokemon"></div>
+  </div>
+  </div>
+  <section id="contenedorCategoriasTotal">
+<section id="contenedorCategorias" class="grid-pokemon">
+  <div class="celda">Pokemon</div>
+  <div class="celda">Tipo 1</div>
+  <div class="celda">Tipo 2</div>
+  <div class="celda">Etapa Evolutiva</div>
+  <div class="celda">Altura</div>
+  <div class="celda">Peso</div>
+  <div class="celda">Color</div>
+  <div class="celda">Generación</div>
 </section>
- <footer id="finalPagina">  
+  </section>
+  <section id="informacion">
+  </section>
+  </main>
+  <footer id="finalPagina">  
   </div>
    <p>Pokedle-2026</p>
     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"  id="botonInfo"width="100" height="100" viewBox="0 0 50 50">
 <path d="M 25 2 C 12.264481 2 2 12.264481 2 25 C 2 37.735519 12.264481 48 25 48 C 37.735519 48 48 37.735519 48 25 C 48 12.264481 37.735519 2 25 2 z M 25 4 C 36.664481 4 46 13.335519 46 25 C 46 36.664481 36.664481 46 25 46 C 13.335519 46 4 36.664481 4 25 C 4 13.335519 13.335519 4 25 4 z M 25 11 A 3 3 0 0 0 25 17 A 3 3 0 0 0 25 11 z M 21 21 L 21 23 L 23 23 L 23 36 L 21 36 L 21 38 L 29 38 L 29 36 L 27 36 L 27 21 L 21 21 z"></path>
 </svg>
   </footer>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script type="module" src="diario.js"></script>
-<script src="menuMinujuegos.js"></script>
-<script src="menuInfo.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="AdivinaPokemon.js"></script>
+  <script src="menuMinujuegos.js"></script>
+  <script src="menuInfo.js"></script>
 </body>
 </html>

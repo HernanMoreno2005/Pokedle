@@ -1,0 +1,162 @@
+@font-face {
+    font-family: pokemon;
+    src: url(PokemonClassic.ttf);
+}
+
+#contenedorInput{
+    display: flex;
+    justify-content: center;
+}
+.result {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  cursor: pointer;
+  background-color: white;
+  width: 100%;
+}
+
+.result:hover,
+.result.active {
+  background: #2e2e2e;
+  color: white;
+}
+
+.result img {
+  width: 40px;
+  margin-right: 10px;
+}
+
+input{
+    margin: 5%;
+    border-radius: 10px;
+}
+.cuadrado{
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: pokemon;
+  font-size: 1.1vh;
+}
+#opciones{
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 4fr));
+  gap: 10px;
+  background-color: white;
+  width: 50%;
+  border: black solid;
+  border-radius: 10px;
+  margin-top: 1%;
+  padding: 15px; 
+  box-sizing: border-box; 
+  
+}
+.elemento{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+#contenedorTotal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+}
+.categoria{
+  text-align: center;
+  height: 3em;  
+}
+#results{
+  max-height: 30%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: absolute;
+  top: 19.6vh;
+  width: 28vh;
+}
+#informacion{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  flex-direction: column-reverse;
+  align-items: center;
+}
+.acierto{
+  background-color: green;
+}
+.fallo{
+  background-color: red;
+}
+.falloPorArriba{
+   background-image: url(flechaArriba.png);
+   background-position: center;
+   background-repeat: no-repeat;
+   background-size: contain;
+  
+}
+.falloPorAbajo{
+  background-image: url(flechaAbajo.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.falloPorArriba,.falloPorAbajo{
+   background-color: red;
+  background-position: center;
+  size: contain;
+}
+.falloPorOrden{
+  background-color: #adad00;
+}
+#contenedorCategorias{
+    display: none;
+    grid-template-columns: repeat(8, minmax(0, 4fr));
+    gap: 10px;
+    width: 50%;
+    border-bottom: white dotted;
+    margin-top: 1%;
+    padding: 15px;
+    box-sizing: border-box;
+    font-family: pokemon;
+
+}
+#contenedorCategoriasTotal{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.celda {
+   display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+  font-size: 1.5vh;
+}
+.celda h4 {
+  margin: 0;
+}
+@media (width <= 768px){
+  #opciones{
+    width: 100%;
+    align-items: center;
+  }
+  #opciones img{
+    width: 7vh;
+  }
+  .celda{
+    font-size: 0.8vh;
+  }
+  #contenedorCategorias{
+    width: 95%;
+    gap:4vh
+  }
+  .cuadrado{
+    font-size: 0.6vh;
+  }
+ 
+}

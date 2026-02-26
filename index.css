@@ -1,0 +1,28 @@
+#imagenPrincipal,#imagenMiniJuegos{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+#imagenMiniJuegos,#minijuegos{
+   margin-top: 4vh;
+}
+#minijuegos{
+    display: flex;
+    justify-content: center;
+}
+#minijuegos img{
+    width: 30vh;
+}
+    
+.juego{
+    cursor: pointer;
+}
+.juego:hover{
+    transform: scale(1.2);
+}
+@media (width <= 768px){
+    #minijuegos{
+        flex-direction: column;
+        align-items: center;
+    }
+}

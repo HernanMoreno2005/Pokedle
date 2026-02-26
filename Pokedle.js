@@ -115,7 +115,8 @@ for (let i = 1; i <= 1025; i++) {
         const respuestaCadena = await fetch(dataEspecies.evolution_chain.url);
         const evolucionData = await respuestaCadena.json();
 
-        variables.nombre = data.name.toLowerCase();
+        variables.nombre = dataEspecies.name.toLowerCase();
+        console.log("nombre: " + variables.nombre);
         variables.tipos = data.types.map(t => t.type.name);
         variables.generacion = dataEspecies.generation.name;
         variables.etapaEvolutiva = buscarEtapa(evolucionData.chain, variables.nombre);
