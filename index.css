@@ -12,13 +12,29 @@
 }
 #minijuegos img{
     width: 30vh;
+    height: 6vh;
 }
     
-.juego{
+.minijuego{
     cursor: pointer;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 12vh;
+    transition: transform 0.3s ease;
+    width: 40vh;
+    font-size: 1vh;
 }
-.juego:hover{
+
+.minijuego:hover{
     transform: scale(1.2);
+    border: solid black;
+}
+
+#minijuegos{
+    gap:4vh
 }
 @media (width <= 768px){
     #minijuegos{

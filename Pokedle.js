@@ -116,7 +116,6 @@ for (let i = 1; i <= 1025; i++) {
         const evolucionData = await respuestaCadena.json();
 
         variables.nombre = dataEspecies.name.toLowerCase();
-        console.log("nombre: " + variables.nombre);
         variables.tipos = data.types.map(t => t.type.name);
         variables.generacion = dataEspecies.generation.name;
         variables.etapaEvolutiva = buscarEtapa(evolucionData.chain, variables.nombre);
@@ -139,27 +138,40 @@ async function obtenerPokemonNombre(nombre){
   const data = await respuesta.json();
   variables.sprite = data.sprites.front_default;
 }
-export function navegacionEntreLetras(){
-       variables.inputsTotales.forEach((fila, filaIndex) => {
-            fila.forEach((input, j) => {
-                input.addEventListener("keydown", (event) => {
-                    if (event.key === "ArrowRight") {
-                        if (fila[j + 1]) fila[j + 1].focus();
-                    } else if (event.key === "ArrowLeft") {
-                        if (fila[j - 1]) fila[j - 1].focus();
-                    } else if (event.key === "Backspace") {
-                        event.preventDefault();
+export function navegacionEntreLetras() {
+    variables.inputsTotales.forEach((fila, filaIndex) => {
+        fila.forEach((input, j) => {
+            input.addEventListener("keydown", (event) => {
+
+                if (event.key === "ArrowRight") {
+                    if (fila[j + 1]) fila[j + 1].focus();
+                } 
+                
+                else if (event.key === "ArrowLeft") {
+                    if (fila[j - 1]) fila[j - 1].focus();
+                } 
+                
+                else if (event.key === "Backspace") {
+                    event.preventDefault();
+
+                    if (input.value === "") {
+                        if (fila[j - 1]) {
+                            fila[j - 1].focus();
+                        }
+                    } else {
                         input.value = "";
-                        if (fila[j - 1]) fila[j - 1].focus();
                     }
-                });
-                input.addEventListener("input", () => {
-                    if (input.value.length === 1 && fila[j + 1]) fila[j + 1].focus();
-                });
+                }
+            });
+
+            input.addEventListener("input", () => {
+                if (input.value.length === 1 && fila[j + 1]) {
+                    fila[j + 1].focus();
+                }
             });
         });
+    });
 }
-
 // Función para detectar si es un dispositivo móvil
 function esDispositivoMovil() {
   return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
@@ -273,8 +285,10 @@ variables.etapaEvolutiva = fromBase64(localStorage.getItem("etapaEvolutiva"));
     actualizarFilasActivas();
     navegacionEntreLetras()
 let palabrasUsadas = parseInt(localStorage.getItem("contadorPalabras")) || 0;
+if(palabrasUsadas == 0){
+  variables.inputsTotales[0][0].focus();
+}
 variables.pokemonPuestos = JSON.parse(localStorage.getItem("pokemonPuestos")) || [];
-variables.guardarEnArray = false;
 pokemonUsados(palabrasUsadas,variables.pokemonPuestos,"infinito");
   }
 });
@@ -324,6 +338,7 @@ document.getElementById("enter").addEventListener('click', () =>{
 })
 
 export async function  pokemonUsados(palabrasUsadas,lista,modo){
+variables.guardarEnArray = false;
 let largo = variables.nombre.length;
 let palabra
 for (let i = 0; i < palabrasUsadas; i++) {

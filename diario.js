@@ -58,6 +58,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         variables.pokemonPuestosDiario = JSON.parse(localStorage.getItem("pokemonPuestosDiario")) || []
         await pokemonUsados(variables.contadorPalabras,variables.pokemonPuestosDiario,"diario");
     }
+    else{
+        variables.inputsTotales[0][0].focus();
+    }
     console.log("entre aca");
     navegacionEntreLetras();
     actualizarFilasActivas();
