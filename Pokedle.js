@@ -185,53 +185,71 @@ export function crearCuadrados(nombre) {
   variables.inputs5 = [];
   variables.inputsTotales = [];
 
-  const esMovil = esDispositivoMovil(); 
+  const esMovil = esDispositivoMovil();
 
   for (let i = 0; i < nombre.length; i++) {
-    // Crear input principal
-    const contenedor = document.createElement("input");
-    contenedor.classList.add("letra", `pos${i}`);
-    contenedor.maxLength = 1;
-    contenedor.readOnly = esMovil; 
-    variables.Pokemon1.appendChild(contenedor);
-    variables.inputs1.push(contenedor);
 
-    // Crear copias
-    const copia = contenedor.cloneNode(true);
-    const copia2 = contenedor.cloneNode(true);
-    const copia3 = contenedor.cloneNode(true);
-    const copia4 = contenedor.cloneNode(true);
+    // Crear contenedor para input + label
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("contenedor-letra");
 
-    // Cambiar clases
-    copia.classList.replace(`pos${i}`, `pos${i + nombre.length}`);
-    copia2.classList.replace(`pos${i}`, `pos${i + 2 * nombre.length}`);
-    copia3.classList.replace(`pos${i}`, `pos${i + 3 * nombre.length}`);
-    copia4.classList.replace(`pos${i}`, `pos${i + 4 * nombre.length}`);
+    // Crear ID único
+    const inputId = `letra-1-${i}`;
 
-    // Aplicar readonly a las copias solo en móviles
-    copia.readOnly = esMovil;
-    copia2.readOnly = esMovil;
-    copia3.readOnly = esMovil;
-    copia4.readOnly = esMovil;
+    // Crear label (oculto visualmente)
+    const label = document.createElement("label");
+    label.setAttribute("for", inputId);
+    label.textContent = `Letra ${i + 1}`;
+    label.classList.add("visually-hidden");
 
-    // Agregar al DOM
-    variables.Pokemon2.appendChild(copia);
-    variables.Pokemon3.appendChild(copia2);
-    variables.Pokemon4.appendChild(copia3);
-    variables.Pokemon5.appendChild(copia4);
+    // Crear input
+    const input = document.createElement("input");
+    input.classList.add("letra", `pos${i}`);
+    input.maxLength = 1;
+    input.readOnly = esMovil;
+    input.id = inputId;
 
-    // Guardar en arrays
-    variables.inputs2.push(copia);
-    variables.inputs3.push(copia2);
-    variables.inputs4.push(copia3);
-    variables.inputs5.push(copia4);
+    // Agregar al wrapper
+    wrapper.appendChild(label);
+    wrapper.appendChild(input);
+
+    variables.Pokemon1.appendChild(wrapper);
+    variables.inputs1.push(input);
+
+
+    for (let fila = 2; fila <= 5; fila++) {
+
+      const wrapperCopia = document.createElement("div");
+      wrapperCopia.classList.add("contenedor-letra");
+
+      const copiaId = `letra-${fila}-${i}`;
+
+      const labelCopia = document.createElement("label");
+      labelCopia.setAttribute("for", copiaId);
+      labelCopia.textContent = `Letra ${i + 1}`;
+      labelCopia.classList.add("visually-hidden");
+
+      const copia = document.createElement("input");
+      copia.classList.add("letra", `pos${i + (fila - 1) * nombre.length}`);
+      copia.maxLength = 1;
+      copia.readOnly = esMovil;
+      copia.id = copiaId;
+
+      wrapperCopia.appendChild(labelCopia);
+      wrapperCopia.appendChild(copia);
+
+      variables[`Pokemon${fila}`].appendChild(wrapperCopia);
+      variables[`inputs${fila}`].push(copia);
+    }
   }
 
-  variables.inputsTotales.push(variables.inputs1);
-  variables.inputsTotales.push(variables.inputs2);
-  variables.inputsTotales.push(variables.inputs3);
-  variables.inputsTotales.push(variables.inputs4);
-  variables.inputsTotales.push(variables.inputs5);
+  variables.inputsTotales.push(
+    variables.inputs1,
+    variables.inputs2,
+    variables.inputs3,
+    variables.inputs4,
+    variables.inputs5
+  );
 }
 
 

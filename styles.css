@@ -5,6 +5,7 @@
 }
 body {
   font-family: pokemon,'nyt-franklin';
+  font-display: swap;
   height: 100vh;
   margin: 0; 
   background: #00405c;
@@ -67,6 +68,7 @@ header {
 }
 #principal{
   padding-bottom:  20px;
+  min-height: 35vh;
 }
 
 .letra{
@@ -81,6 +83,7 @@ header {
   text-transform: uppercase;
   text-align: center;
   font-family: pokemon,'nyt-franklin';
+  font-display: swap;
   aspect-ratio: 1 / 1;
 }
 
@@ -119,12 +122,14 @@ header {
   border-radius: 15px;
   margin-bottom: 0;
   font-family: pokemon,'nyt-franklin';
+  font-display: swap;
   margin-top: 5%;
   font-size: 60%;
   
 }
 h4{
   font-family: pokemon,'nyt-franklin';
+  font-display: swap;
   text-align: center;
 }
 #contenedorPista1,#contenedorPista2,#contenedorPista3{
@@ -138,13 +143,16 @@ h4{
   margin-bottom: 0;
   font-size: 8px;
   font-family: pokemon,'nyt-franklin';
+  font-display: swap;
   text-align: center;
 }
 h3{
    font-family: pokemon,'nyt-franklin';
+   font-display: swap;
 }
 #tituloFinal{
   font-family: pokemon,'nyt-franklin';
+  font-display: swap;
   font-size: 153%;
   text-align: center;
 }
@@ -181,6 +189,7 @@ input:disabled{
 .minijuego{
   padding: 1vh;
   font-family: pokemon, 'nyt-franklin';
+  font-display: swap;
   color: black;
   text-decoration: none;
   font-size: 70%;
@@ -248,6 +257,7 @@ a{
 display: flex;
 flex-direction: column;
 gap: 10px;
+min-height: 22vh;
 }
 .fila {
 display: flex;
@@ -289,6 +299,7 @@ background-color: #bb2323;
       align-items: center;
       gap:1vh;
       font-family: pokemon;
+      font-display: swap;
     }
 #finalPagina svg{
   width: 4vh;
@@ -355,6 +366,7 @@ background-color: #bb2323;
 #logoMenu{
   width: 25vh;
 }
+
 @media (width <= 768px) {
     .letra{
       width: 9vw;
@@ -381,5 +393,7 @@ background-color: #bb2323;
     #finalPagina svg{
       width: 3vh;
     }
-    
+    #logoDiario{
+        height: 16vh;
+    }
 }
