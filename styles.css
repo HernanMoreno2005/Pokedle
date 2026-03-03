@@ -179,12 +179,28 @@ input:disabled{
   height: 500px;
 }
 .minijuego{
-  padding: 0;
-  font-family: pokemon,'nyt-franklin';
-  color:black;
+  padding: 1vh;
+  font-family: pokemon, 'nyt-franklin';
+  color: black;
   text-decoration: none;
   font-size: 70%;
   font-weight: bold;
+  border: solid black;
+  border-radius: 10px;
+  text-align: center;
+  transition: transform 0.3s ease;
+  width: 100%;
+}
+.minijuego:hover{
+  transform: scale(1.1);
+  background-color: black;
+  color: white;
+}
+#minijuegosMenu{
+  gap:2vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 a{
   text-decoration: none;
@@ -272,6 +288,7 @@ background-color: #bb2323;
       color: white;
       align-items: center;
       gap:1vh;
+      font-family: pokemon;
     }
 #finalPagina svg{
   width: 4vh;
@@ -335,6 +352,9 @@ background-color: #bb2323;
 #cerrarModal{
   cursor: pointer;
 }
+#logoMenu{
+  width: 25vh;
+}
 @media (width <= 768px) {
     .letra{
       width: 9vw;
@@ -357,6 +377,9 @@ background-color: #bb2323;
  }
  h3{
       font-size: 79 vw;
+    }
+    #finalPagina svg{
+      width: 3vh;
     }
     
 }

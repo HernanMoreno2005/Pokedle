@@ -15,7 +15,7 @@
     height: 6vh;
 }
     
-.minijuego{
+.minijuegoPrincipal{
     cursor: pointer;
     background-color: white;
     border-radius: 10px;
@@ -26,9 +26,10 @@
     transition: transform 0.3s ease;
     width: 40vh;
     font-size: 1vh;
+    color: black;
 }
 
-.minijuego:hover{
+.minijuegoPrincipal:hover{
     transform: scale(1.2);
     border: solid black;
 }

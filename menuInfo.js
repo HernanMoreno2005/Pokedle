@@ -5,7 +5,7 @@ const botonInfo = document.getElementById("botonInfo");
 botonInfo.addEventListener("click",()=>{
   overlay.style.display = "flex";
   modalInfo.style.display = "block";
-  console.log("entre aca");
+
 })
 
 cerrarModalInfo.addEventListener("click",() => {
