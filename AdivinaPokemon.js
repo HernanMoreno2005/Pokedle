@@ -83,6 +83,70 @@ function obtenerFechaLocal() {
          String(d.getDate()).padStart(2, "0");
 }
 
+function tiempoHastaManana() {
+  const ahora = new Date();
+
+  const manana = new Date(ahora);
+  manana.setDate(ahora.getDate() + 1);
+  manana.setHours(0, 0, 0, 0);
+
+  return manana - ahora;
+}
+function iniciarContador(elemento) {
+
+  function tiempoHastaManana() {
+    const ahora = new Date();
+    const manana = new Date(ahora);
+    manana.setDate(ahora.getDate() + 1);
+    manana.setHours(0, 0, 0, 0);
+    return manana - ahora;
+  }
+
+  function actualizarContador() {
+    const restante = tiempoHastaManana();
+
+    if (restante <= 0) {
+      location.reload();
+      return;
+    }
+
+    const horas = Math.floor(restante / (1000 * 60 * 60));
+    const minutos = Math.floor((restante / (1000 * 60)) % 60);
+    const segundos = Math.floor((restante / 1000) % 60);
+
+    elemento.textContent =
+      "Nuevo Pokemon en: " +
+      String(horas).padStart(2, "0") + ":" +
+      String(minutos).padStart(2, "0") + ":" +
+      String(segundos).padStart(2, "0");
+  }
+
+  actualizarContador();
+  setInterval(actualizarContador, 1000);
+}
+
+function actualizarContador() {
+  const restante = tiempoHastaManana();
+
+  if (restante <= 0) {
+    activarNuevoDia();
+    return;
+  }
+
+  const horas = Math.floor(restante / (1000 * 60 * 60));
+  const minutos = Math.floor((restante / (1000 * 60)) % 60);
+  const segundos = Math.floor((restante / 1000) % 60);
+
+  const texto =
+    String(horas).padStart(2, "0") + ":" +
+    String(minutos).padStart(2, "0") + ":" +
+    String(segundos).padStart(2, "0");
+
+  document.getElementById("contador").textContent = texto;
+}
+
+
+
 async function funcionObtenerPokemonDiario() {
 
     let seed = numeroDiario();
@@ -287,6 +351,15 @@ function compararPokemon(pokemonSeleccionado,pokemonDia){
         mensajeFinal.appendChild(imgFinal);
         modalHeader.style.backgroundColor = "#0dc616";
         tituloFinal.textContent = "Ganaste";
+        const contenedor = document.createElement("div");
+        contenedor.id = "contador";
+        contenedor.style.marginTop = "15px";
+        contenedor.style.fontSize = "1.5rem";
+        contenedor.style.fontWeight = "bold";
+        contenedor.style.textAlign = "center";
+        contenedor.style.fontFamily = "pokemon";
+        mensajeFinal.appendChild(contenedor);
+        iniciarContador(contenedor);
         modalFinal.show();
         input.placeholder = "¡Encontraste el pokemon!";
         input.disabled = true;
