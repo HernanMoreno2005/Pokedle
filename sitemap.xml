@@ -7,17 +7,17 @@
   </url>
 
   <url>
-    <loc>https://pokedle-game.vercel.app/diario</loc>
+    <loc>https://pokedle-game.vercel.app/pokedle-diario</loc>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://pokedle-game.vercel.app/infinito</loc>
+    <loc>https://pokedle-game.vercel.app/pokedle-infinito</loc>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://pokedle-game.vercel.app/AdivinaElPokemon</loc>
+    <loc>https://pokedle-game.vercel.app/adivina-pokemon</loc>
     <priority>0.8</priority>
   </url>
 </urlset>
