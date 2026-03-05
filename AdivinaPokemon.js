@@ -9,7 +9,6 @@ let pokemonUtilizados = JSON.parse(localStorage.getItem("pokemonUsadosAdivina"))
 let selectedIndex = 0;
 let nombrePokemonDelDia;
 let contenedorCategorias = document.getElementById("contenedorCategorias");
-const estilosCategorias = window.getComputedStyle(contenedorCategorias);
 let img;
 let idPokemonSeleccionado;
 let IDBIEN;
@@ -364,9 +363,7 @@ function compararPokemon(pokemonSeleccionado,pokemonDia){
         input.placeholder = "¡Encontraste el pokemon!";
         input.disabled = true;
 }
-if(estilosCategorias.display == "none"){
-   contenedorCategorias.style.display = "grid";
-}
+
  }
 // Obtener todos los Pokémon
 async function obtenerTodosLospokemon() {

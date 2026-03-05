@@ -26,7 +26,9 @@
   width: 40px;
   margin-right: 10px;
 }
-
+#busqueda{
+  margin: 3vh;
+}
 input{
     margin: 5%;
     border-radius: 10px;
@@ -113,7 +115,7 @@ input{
   background-color: #adad00;
 }
 #contenedorCategorias{
-    display: none;
+    display: grid;
     grid-template-columns: repeat(8, minmax(0, 4fr));
     gap: 10px;
     width: 50%;
@@ -142,24 +144,7 @@ input{
 }
 
 
-.nuevo-dia {
-  animation: flip 0.6s ease forwards;
-}
 
-@keyframes flip {
-  0% {
-    transform: rotateX(0deg);
-    opacity: 1;
-  }
-  50% {
-    transform: rotateX(90deg);
-    opacity: 0;
-  }
-  100% {
-    transform: rotateX(0deg);
-    opacity: 1;
-  }
-}
 @media (width <= 768px){
   #opciones{
     width: 100%;
