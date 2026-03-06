@@ -520,8 +520,7 @@ variables.guardarEnArray = true;
         variables.mensajeFinal.appendChild(revelar);
         variables.mensajeFinal.appendChild(img);
         let modo = localStorage.getItem("modoJuego"); 
-          if(modo == "diario"){
-          console.log("entre aca");
+        if(modo == "diario"){
         const contenedor = document.createElement("div");
         contenedor.id = "contador";
         contenedor.style.marginTop = "15px";

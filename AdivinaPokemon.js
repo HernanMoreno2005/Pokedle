@@ -1,5 +1,15 @@
 let input = document.getElementById("busqueda");
 let contenedor = document.getElementById("informacion");
+let contenedorRacha= document.getElementById("contadorRacha");
+let numeroDeRachas;
+if(localStorage.getItem("racha")){
+  numeroDeRachas = fromBase64(localStorage.getItem("racha"))
+}
+else{
+  numeroDeRachas = 0;
+}  
+let numeroDeRachaHoy = numeroDeRachas;
+contenedorRacha.textContent = numeroDeRachas;
 let allPokemon = [];
 let filteredResults = [];
 let infoPokemonSeleccionado = [];
@@ -57,14 +67,111 @@ const categorias = [
 
   return mapa[romano] || 0;
 }
+// Encriptar
+    function toBase64(str) {
+    const bytes = new TextEncoder().encode(str);
+    let binary = '';
+    bytes.forEach((b) => binary += String.fromCharCode(b));
+    return btoa(binary);
+}
+
+// Desencriptar
+    function fromBase64(str) {
+    const binary = atob(str);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+    }
+    return new TextDecoder().decode(bytes);
+}
+
+const paradojaES_EN = {
+  "Colmilargo": "great-tusk",
+  "Colagrito": "scream-tail",
+  "Furioseta": "brute-bonnet",
+  "melenaleteo": "flutter-mane",
+  "reptalada": "slither-wing",
+  "Pelarena": "sandy-shocks",
+  "Bramaluna": "roaring-moon",
+
+  "Ferrodada": "iron-treads",
+  "Ferrosaco":"iron-bundle" ,
+  "ferropalmas": "iron-hands",
+  "ferrocuello": "iron-jugulis",
+  "ferropolilla": "iron-moth",
+  "ferropuas": "iron-thorns",
+  "Ferropaladin": "iron-valiant",
+
+  "ondulagua": "walking-wake",
+  "Ferroverdor": "iron-leaves",
+
+  "Ferromole": "iron-boulder",
+  "Ferrotesta": "iron-crown",
+
+  "Flamariete": "gouging-fire",
+  "Electrofuria": "raging-bolt"
+};
+const paradojaEN_ES = {
+  "great-tusk": "Colmilargo",
+  "scream-tail": "Colagrito",
+  "brute-bonnet": "Furioseta",
+  "flutter-mane": "Melenaleteo",
+  "slither-wing": "Reptalada",
+  "sandy-shocks": "Pelarena",
+  "roaring-moon": "Bramaluna",
+
+  "iron-treads": "Ferrodada",
+  "iron-bundle":"Ferrosaco" ,
+  "iron-hands": "Ferropalmas",
+  "iron-jugulis": "Ferrocuello",
+  "iron-moth": "Ferropolilla",
+  "iron-thorns": "Ferropuas",
+  "iron-valiant": "Ferropaladin",
+
+  "walking-wake": "Ondulagua",
+  "iron-leaves": "Ferroverdor",
+
+  "iron-boulder": "Ferromole",
+  "iron-crown": "Ferrotesta",
+
+  "gouging-fire": "Flamariete",
+  "raging-bolt": "Electrofuria"
+};
+function convertirBusqueda(nombre){
+  const n = normalize(nombre);
+  if(paradojaES_EN[n]){
+    return paradojaES_EN[n];
+  }
+
+  return n;
+}
+function esMayorPorDosDias(fecha) {
+  const hoy = new Date(obtenerFechaLocal());
+  const fechaComparar = new Date(fecha);
+
+  const diferenciaMs = hoy - fechaComparar;
+  const diferenciaDias = diferenciaMs / (1000 * 60 * 60 * 24);
+
+  return diferenciaDias >= 2;
+}
 function numeroDiario() {
   const hoy = obtenerFechaLocal();
-  const fechaGuardada = localStorage.getItem("fecha");
+  const fechaGuardada = fromBase64(localStorage.getItem("fecha"));
+  if(esMayorPorDosDias(fechaGuardada)){
+    let ceroEncriptado = toBase64(0);
+    localStorage.setItem("racha",ceroEncriptado);
+    contenedorRacha.textContent = 0;
+    numeroDeRachaHoy = 0;
+    numeroDeRachas = 0;
+  }
 
   if (fechaGuardada !== hoy) {
-    localStorage.clear(); 
-    localStorage.setItem("fecha", hoy);
+    localStorage.removeItem("pokemonUsadosAdivina");
+    pokemonUtilizados = [];
+    let fechaEncriptada = toBase64(hoy);
+    localStorage.setItem("fecha", fechaEncriptada);
   }
+  
 
   const seed = hoy;
 
@@ -176,7 +283,7 @@ infoPokemonDia = await obtenerPokemonEnEspanol(nombrePokemonDelDia);
 
       compararPokemon(infoPokemonSeleccionado, infoPokemonDia);
 
-      ContenedorInformacion(infoPokemonSeleccionado,infoPokemonDia);
+      ContenedorInformacion(infoPokemonSeleccionado,infoPokemonDia,true);
   }
 }
 pokemonYaUsados();
@@ -312,7 +419,7 @@ function compararPokemon(pokemonSeleccionado,pokemonDia){
   });
 
 }
- function ContenedorInformacion(infoPokemonSeleccionado,infoPokemonDia){
+ function ContenedorInformacion(infoPokemonSeleccionado,infoPokemonDia,pokemonUsados){
 
   // Crear el div opciones
   const opciones = document.createElement("div");
@@ -360,6 +467,12 @@ function compararPokemon(pokemonSeleccionado,pokemonDia){
         mensajeFinal.appendChild(contenedor);
         iniciarContador(contenedor);
         modalFinal.show();
+        if(!pokemonUsados){
+        numeroDeRachas++;
+        let rachaEncriptada = toBase64(numeroDeRachas);
+        localStorage.setItem("racha",rachaEncriptada);
+        contenedorRacha.textContent = numeroDeRachas;
+        }
         input.placeholder = "¡Encontraste el pokemon!";
         input.disabled = true;
 }
@@ -381,11 +494,17 @@ function normalize(text) {
 
 // Filtrado
 function filterPokemon(list, value) {
+
   const search = normalize(value);
 
-  return list.filter(p =>
-    normalize(p.name).includes(search)
-  );
+  return list.filter(p => {
+
+    const nombreEN = normalize(p.name);
+    const nombreES = normalize(paradojaEN_ES[p.name] || "");
+
+    return nombreEN.includes(search) || nombreES.includes(search);
+  });
+
 }
 
 function actualizarSeleccion() {
@@ -410,7 +529,8 @@ function renderVisible() {
 
   filteredResults.forEach((pokemon, index) => {
 
-   const id = pokemon.url.split("/").filter(Boolean).pop();
+    const id = pokemon.url.split("/").filter(Boolean).pop();
+    const nombreMostrar = paradojaEN_ES[pokemon.name] || pokemon.name;
 
     const div = document.createElement("div");
     div.classList.add("result");
@@ -418,7 +538,7 @@ function renderVisible() {
 
     div.innerHTML = `
       <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png">
-      <span>${pokemon.name}</span>
+      <span>${nombreMostrar}</span>
     `;
 
     div.addEventListener("click", async () => {
@@ -426,15 +546,18 @@ function renderVisible() {
       selectedIndex = index;
       actualizarSeleccion();
 
-      input.value = pokemon.name;
+      input.value = nombreMostrar;
       container.innerHTML = "";
 
       infoPokemonSeleccionado =
         await obtenerPokemonEnEspanol(pokemon.name);
-        pokemonUtilizados.push(pokemon.name);
-        localStorage.setItem("pokemonUsadosAdivina", JSON.stringify(pokemonUtilizados));
+
+      pokemonUtilizados.push(pokemon.name);
+      localStorage.setItem("pokemonUsadosAdivina", JSON.stringify(pokemonUtilizados));
+
       compararPokemon(infoPokemonSeleccionado, infoPokemonDia);
-      ContenedorInformacion(infoPokemonSeleccionado, infoPokemonDia);
+      ContenedorInformacion(infoPokemonSeleccionado, infoPokemonDia,false);
+
       input.value = "";
     });
 
@@ -512,7 +635,7 @@ input.addEventListener("keydown", async (e) => {
       infoPokemonSeleccionado = await obtenerPokemonEnEspanol(selectedPokemon.name);
         
       compararPokemon(infoPokemonSeleccionado, infoPokemonDia);
-      ContenedorInformacion(infoPokemonSeleccionado, infoPokemonDia);
+      ContenedorInformacion(infoPokemonSeleccionado, infoPokemonDia,false);
     }
     input.value = "";
   }
