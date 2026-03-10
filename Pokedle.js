@@ -11,7 +11,10 @@ export const variables = {
     pista1: document.getElementById("pista1"),
     pista2: document.getElementById("pista2"),
     pista3: document.getElementById("pista3"),
-
+    racha:  document.getElementById("contadorRacha"),
+    rachaInfinita: document.getElementById("contadorRachaInfinita"),
+    numeroRachaDiaria: 0,
+    numeroRachaInfinita:0,
     contenedor1: document.getElementById("contenedorPista1"),
     contenedor2: document.getElementById("contenedorPista2"),
     contenedor3: document.getElementById("contenedorPista3"),
@@ -72,6 +75,8 @@ export const variables = {
         steel: { nombre: "Acero", color: "#b8b8d0" },
     }
 };
+let mejorRacha = 0;
+let botonSiguiente = document.getElementById("botonReiniciar");
 // Encriptar
 export function toBase64(str) {
     const bytes = new TextEncoder().encode(str);
@@ -89,7 +94,6 @@ export function fromBase64(str) {
     }
     return new TextDecoder().decode(bytes);
 }
-
 
 
 // Inicializar los modales
@@ -133,10 +137,36 @@ for (let i = 1; i <= 1025; i++) {
         console.error("Error al obtener el Pokémon:", error);
     }
 }
-async function obtenerPokemonNombre(nombre){
-  const respuesta = await fetch(`https://pokeapi.co/api/v2/pokemon/${nombre}`);
-  const data = await respuesta.json();
-  variables.sprite = data.sprites.front_default;
+
+export function obtenerFechaLocal() {
+  const d = new Date();
+  return d.getFullYear() + "-" +
+         String(d.getMonth() + 1).padStart(2, "0") + "-" +
+         String(d.getDate()).padStart(2, "0");
+}
+
+async function obtenerPokemonNombre(nombre) {
+  try {
+    // intentar obtener el pokemon directamente
+    let respuesta = await fetch(`https://pokeapi.co/api/v2/pokemon/${nombre}`);
+
+    if (!respuesta.ok) {
+      // si falla, buscar la especie
+      const resSpecies = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${nombre}`);
+      const dataSpecies = await resSpecies.json();
+
+      const defaultForm = dataSpecies.varieties.find(v => v.is_default);
+      const nombreForma = defaultForm.pokemon.name;
+
+      respuesta = await fetch(`https://pokeapi.co/api/v2/pokemon/${nombreForma}`);
+    }
+
+    const data = await respuesta.json();
+    variables.sprite = data.sprites.front_default;
+
+  } catch (error) {
+    console.error("No se pudo obtener el Pokémon:", error);
+  }
 }
 export function navegacionEntreLetras() {
     variables.inputsTotales.forEach((fila, filaIndex) => {
@@ -328,6 +358,32 @@ function iniciarContador(elemento) {
 // Iniciar
 document.addEventListener("DOMContentLoaded", async() => {
   const modo = localStorage.getItem("modoJuego");
+  let modoRacha = localStorage.getItem("modoJuego");
+  if(localStorage.getItem("mejorRacha") && modo == "infinito"){
+     mejorRacha =  localStorage.getItem("mejorRacha");
+     variables.rachaInfinita.textContent= mejorRacha;
+  }
+  else if (modo == "infinito"){
+    variables.rachaInfinita.textContent= 0;
+  }
+if(modoRacha == "diario"){
+  if(localStorage.getItem("rachaClasicaDiaria")){
+  variables.racha.textContent = fromBase64(localStorage.getItem("rachaClasicaDiaria"));
+  variables.numeroRachaDiaria = fromBase64(localStorage.getItem("rachaClasicaDiaria"));
+  }
+  else{
+  variables.racha.textContent =0;
+  }
+}
+else{
+  if(localStorage.getItem("rachaClasicaInfinita")){
+  variables.racha.textContent = fromBase64(localStorage.getItem("rachaClasicaInfinita"));
+  variables.numeroRachaInfinita = fromBase64(localStorage.getItem("rachaClasicaInfinita"));
+  }
+  else{
+  variables.racha.textContent = 0
+  }
+}
   const final = localStorage.getItem("final");
   if (modo === "infinito" && (final == "true" || final === null)) {
     obtenerPokemon();
@@ -388,11 +444,11 @@ teclas.forEach(tecla => {
 
 document.addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
-        analizarPokemon(variables.nombre);
+        analizarPokemon(variables.nombre,false);
     }
 });
 document.getElementById("enter").addEventListener('click', () =>{
-  analizarPokemon(variables.nombre);
+  analizarPokemon(variables.nombre,false);
 })
 
 export async function  pokemonUsados(palabrasUsadas,lista,modo){
@@ -411,11 +467,11 @@ for (let i = 0; i < palabrasUsadas; i++) {
     let letraInput = document.querySelector(`.letra.pos${pos}`);
     if (letraInput) letraInput.value = palabra[j];
   }
-await analizarPokemon(variables.nombre); 
+await analizarPokemon(variables.nombre,true); 
 if(modo == "diario"){
   const contadorOriginal = variables.contadorPalabras;
         variables.contadorPalabras = i;  
-        await analizarPokemon(variables.nombre);
+        await analizarPokemon(variables.nombre,true);
         variables.contadorPalabras = contadorOriginal;
 }
 }
@@ -423,25 +479,22 @@ variables.guardarEnArray = true;
 }
 
 
- export async function analizarPokemon(nombre) {
+ export async function analizarPokemon(nombre,pokemonUsado) {
   const letras = [];
   variables.letrasPokemons = contarLetras(nombre);
 
   // juntar las letras ingresadas y formar palabra
   for (let i = 0; i < nombre.length; i++) {
-    let letraInput;
-    if (variables.contadorPalabras === 0) {
-      letraInput = document.querySelector(`.letra.pos${i}`);
-    } else {
-      letraInput = document.querySelector(`.letra.pos${nombre.length * variables.contadorPalabras + i}`);
-    }
-    letras[i] = letraInput.value.toLowerCase();
-  }
+  const pos = nombre.length * variables.contadorPalabras + i;
+  const letraInput = document.querySelector(`.letra.pos${pos}`);
+
+  letras[i] = letraInput?.value?.toLowerCase() || "";
+}
 
   let palabra = letras.join("");
   variables.existeEspacio = letras.includes("");
   try {
-    const respuesta = await fetch(`https://pokeapi.co/api/v2/pokemon/${palabra}`);
+    const respuesta = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${palabra}`);
     if (!respuesta.ok) {
       variables.modal.show();
       setTimeout(() => variables.modal.hide(), 1000);
@@ -539,12 +592,45 @@ variables.guardarEnArray = true;
         if (variables.contadorVerdes === palabra.length) {
           variables.tituloFinal.textContent = "Ganaste";
           variables.modalHeader.style.backgroundColor = "#0dc616";
+          if(!pokemonUsado){
+          if(modo == "diario"){
+            let fecha= obtenerFechaLocal();
+            let fechaCodificada= toBase64(fecha);
+            localStorage.setItem("fechaDiariaClassic",fechaCodificada);
+            variables.numeroRachaDiaria++;
+            let rachaEncriptada = toBase64(variables.numeroRachaDiaria);
+            localStorage.setItem("rachaClasicaDiaria",rachaEncriptada); 
+            variables.racha.textContent = variables.numeroRachaDiaria;
+          }
+          else{
+             variables.numeroRachaInfinita++;
+             let rachaInfinitaCodificada= toBase64(variables.numeroRachaInfinita);
+             variables.racha.textContent = variables.numeroRachaInfinita;
+             localStorage.setItem("rachaClasicaInfinita",rachaInfinitaCodificada);
+             if(variables.numeroRachaInfinita > mejorRacha){
+               mejorRacha= variables.numeroRachaInfinita;
+             };
+              localStorage.setItem("mejorRacha",mejorRacha);
+              variables.rachaInfinita.textContent= mejorRacha;
+          }
+          }
+          
         } else {
           variables.tituloFinal.textContent = "Perdiste";
           variables.modalHeader.style.backgroundColor = "#e20b0bff";
+          if(modo == "diario"){
+            localStorage.removeItem("rachaClasicaDiaria");
+          }
+          else{
+            localStorage.removeItem("rachaClasicaInfinita");
+          }
+          variables.racha.textContent = 0;
         }
         localStorage.setItem("pokemonPuestos","");
-        
+        botonSiguiente.style.display = "block";
+        botonSiguiente.addEventListener("click",() =>{
+          location.reload();
+        })
       
       } else {
         variables.contadorVerdes = 0;
@@ -568,6 +654,7 @@ variables.guardarEnArray = true;
         revelarPista1.style.color = "white";
         revelarPista1.style.fontSize = "79%"
         revelarPista1.style.marginBottom = 0;
+        revelarPista1.style.padding = "1vh";
 
         variables.pista1.style.display = "none";
         variables.fallo1.style.display = "none";
@@ -594,8 +681,10 @@ variables.guardarEnArray = true;
           variables.contenedor1.style.width = "30vh";
           revelarPista1.textContent = nombreTipo1;
           revelarPista1.style.color = "black";
+          revelarPista1.style.borderRadius = "10px 0 0 10px";
           variables.contenedor1.style.textAlign = "center";
           variables.contenedor1.style.cursor = "default";
+          variables.contenedor1.style.padding = "0";
 
           if (segundoTipo) {
             segundoTipo.textContent = nombreTipo2;
@@ -607,6 +696,8 @@ variables.guardarEnArray = true;
             segundoTipo.style.width = "50%";
             segundoTipo.style.margin = 0;
             segundoTipo.style.fontSize = "79%";
+            segundoTipo.style.padding = "1vh";
+            segundoTipo.style.borderRadius = "0 10px 10px 0";
             variables.contenedor1.appendChild(segundoTipo);
             variables.contenedor1.style.display = "flex";
           } else {

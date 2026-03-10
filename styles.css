@@ -68,7 +68,7 @@ header {
 }
 #principal{
   padding-bottom:  20px;
-  min-height: 35vh;
+  margin-top: 2vh;
 }
 
 .nuevo-dia {
@@ -152,8 +152,27 @@ h4{
   font-display: swap;
   text-align: center;
 }
-#racha{
-  width: 27vh;
+#contenedorBoton{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+#botonReiniciar{
+  display: none;
+  background-color: white;
+  font-family: pokemon;
+  border-radius: 10px;
+  padding: 1vh;
+  border: solid black;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  margin-bottom: 1vh;
+}
+#botonReiniciar:hover{
+  transform: scale(1.2);
+}
+#racha,#rachaInfinita{
+  width: 28vh;
   background-color: white;
   border-radius: 5px;
   padding: 0.5vh;
@@ -164,7 +183,7 @@ h4{
   justify-content: center;
   align-items: center;
 }
-#contadorRacha{
+#contadorRacha,#contadorRachaInfinita{
   width: 50px;
   height: 50px;
   background-image: url(logoRacha.png);
@@ -172,6 +191,10 @@ h4{
   display: flex;
   justify-content: center;
   align-items: center;
+}
+#rachas{
+  display: flex;
+  gap: 1vh;
 }
 #contenedorPista1,#contenedorPista2,#contenedorPista3{
   background-color: white;
@@ -181,6 +204,10 @@ h4{
   width: 20%;
   padding: 1vh;
 }
+#contenedorPista2,#contenedorPista3{
+
+}
+
 #fallo1,#fallo2,#fallo3{
   margin-bottom: 0;
   font-size: 8px;
@@ -299,7 +326,7 @@ a{
 display: flex;
 flex-direction: column;
 gap: 10px;
-min-height: 22vh;
+min-height: 28vh;
 }
 .fila {
 display: flex;
@@ -437,5 +464,8 @@ background-color: #bb2323;
     }
     #logoDiario{
         height: 16vh;
+    }
+    #rachas{
+      flex-direction: column;
     }
 }

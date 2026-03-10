@@ -2,31 +2,53 @@
 <urlset
       xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-
-
+      http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
 <url>
   <loc>https://pokedle-game.vercel.app/</loc>
-  <lastmod>2026-03-05T15:47:06+00:00</lastmod>
+  <lastmod>2026-03-10T00:00:00+00:00</lastmod>
+  <changefreq>daily</changefreq>
   <priority>1.00</priority>
+  <image:image>
+    <image:loc>https://pokedle-game.vercel.app/icon.png</image:loc>
+    <image:title>Pokedle - Juego de adivinar Pokémon</image:title>
+  </image:image>
 </url>
+
 <url>
   <loc>https://pokedle-game.vercel.app/pokedle-diario</loc>
-  <lastmod>2026-03-05T15:47:07+00:00</lastmod>
-  <priority>0.80</priority>
+  <lastmod>2026-03-10T00:00:00+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.90</priority>
+  <image:image>
+    <image:loc>https://pokedle-game.vercel.app/icon.png</image:loc>
+    <image:title>Pokedle Diario</image:title>
+  </image:image>
 </url>
-<url>
-  <loc>https://pokedle-game.vercel.app/pokedle-infinito</loc>
-  <lastmod>2026-03-05T15:47:07+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
+
 <url>
   <loc>https://pokedle-game.vercel.app/adivina-pokemon</loc>
-  <lastmod>2026-03-05T15:47:08+00:00</lastmod>
-  <priority>0.80</priority>
+  <lastmod>2026-03-10T00:00:00+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.90</priority>
+  <image:image>
+    <image:loc>https://pokedle-game.vercel.app/icon.png</image:loc>
+    <image:title>Adivina el Pokémon</image:title>
+  </image:image>
 </url>
 
+<url>
+  <loc>https://pokedle-game.vercel.app/pokedle-infinito</loc>
+  <lastmod>2026-03-10T00:00:00+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+  <image:image>
+    <image:loc>https://pokedle-game.vercel.app/icon.png</image:loc>
+    <image:title>Pokedle Infinito</image:title>
+  </image:image>
+</url>
 
 </urlset>
+

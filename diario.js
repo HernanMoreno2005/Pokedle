@@ -1,5 +1,5 @@
 localStorage.setItem("modoJuego", "diario"); 
-import {crearCuadrados,variables,actualizarFilasActivas,contarLetras,buscarEtapa,navegacionEntreLetras, analizarPokemon,pokemonUsados,toBase64,fromBase64} from "./Pokedle.js";
+import {crearCuadrados,variables,actualizarFilasActivas,contarLetras,buscarEtapa,navegacionEntreLetras, analizarPokemon,pokemonUsados,toBase64,fromBase64,obtenerFechaLocal} from "./Pokedle.js";
 let cambioPokemon = false;
 // Genera un  pokemon dependiendo la fecha.
 function numeroDiario() {
@@ -11,6 +11,31 @@ function numeroDiario() {
             .map(c => c.charCodeAt(0))
             .reduce((a, b) => a * 31 + b, 7)
     );
+}
+
+function esMayorPorDosDias(fecha) {
+  const hoy = new Date(obtenerFechaLocal());
+  const fechaComparar = new Date(fecha);
+
+  const diferenciaMs = hoy - fechaComparar;
+  const diferenciaDias = diferenciaMs / (1000 * 60 * 60 * 24);
+
+  return diferenciaDias >= 2;
+}
+let fechaGuardada;
+let comparacion = false;
+if(localStorage.getItem("fechaDiariaClassic")) {
+    fechaGuardada=fromBase64(localStorage.getItem("fechaDiariaClassic"));
+    comparacion= true;
+}
+
+let fechaHoy=obtenerFechaLocal(); 
+if(comparacion){
+    if(esMayorPorDosDias(fechaGuardada)){
+        variables.racha.textContent = 0;
+        variables.numeroRachaDiaria = 0;
+        localStorage.removeItem("fechaDiariaClassic");
+    }
 }
 
 async function obtenerPokemonDiario() {
@@ -51,6 +76,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if(contadorPalabras){
         variables.contadorPalabras = contadorPalabras;
     }
+    
     crearCuadrados(variables.nombre);
     if(contadorPalabras > 0){
         variables.pokemonPuestosDiario = JSON.parse(localStorage.getItem("pokemonPuestosDiario")) || []
