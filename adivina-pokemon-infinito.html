@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- SEO básico -->
-    <title>Pokedle - Adivina el Pokémon Diario</title>
-    <meta name="description" content="Adivina el Pokémon usando pistas como tipo, evolución, altura, peso, color y generación. Juega online gratis y pon a prueba tus conocimientos.">
+    <title>Pokedle - Adivina el Pokémon Infinito</title>
+    <meta name="description" content="Adivina el Pokémon usando pistas como tipo, evolución, altura, peso, color y generación en su version infinita. Juega online gratis y pon a prueba tus conocimientos.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://pokedle-game.vercel.app/">
     <meta name="theme-color" content="#000000">
@@ -14,8 +14,8 @@
     <!-- Open Graph -->
     <meta property="og:url" content="https://pokedle-game.vercel.app/">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Pokedle - Adivina el Pokémon">
-    <meta property="og:description" content="Adivina el Pokémon usando pistas como tipo, evolución, altura, peso, color y generación. Juega online gratis y pon a prueba tus conocimientos.">
+    <meta property="og:title" content="Pokedle - Adivina el Pokémon infinito">
+    <meta property="og:description" content="Adivina el Pokémon usando pistas como tipo, evolución, altura, peso, color y generación en su version infinita. Juega online gratis y pon a prueba tus conocimientos.">
     <meta property="og:image" content="https://pokedle-game.vercel.app/logoPrincipalCompartir.png">
 
     <!-- Twitter -->
@@ -23,17 +23,18 @@
     <meta property="twitter:domain" content="pokedle-game.vercel.app">
     <meta property="twitter:url" content="https://pokedle-game.vercel.app/">
     <meta name="twitter:title" content="Pokedle - Adivina el Pokémon">
-    <meta name="twitter:description" content="Adivina el Pokémon usando pistas como tipo, evolución, altura, peso, color y generación. Juega online gratis y pon a prueba tus conocimientos.">
+    <meta name="twitter:description" content="Adivina el Pokémon usando pistas como tipo, evolución, altura, peso, color y generación en su version infinita. Juega online gratis y pon a prueba tus conocimientos.">
     <meta name="twitter:image" content="https://pokedle-game.vercel.app/logoPrincipalCompartir.png">
 
     <link rel="icon" type="image/png" href="pokebola.png">
 
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="AdivinaPokemon.css">
+    <link rel="stylesheet" href="AdivinaPokemonInfinito.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 </head>
 <body>
-    <header>
+ <header>
 <svg id="abrirModal" xmlns="http://www.w3.org/2000/svg" width="70" height="70" fill="currentColor" color = "white" class="bi bi-list" viewBox="0 0 16 16" style="cursor:pointer;">
   <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
 </svg>
@@ -49,7 +50,7 @@
     <section id="minijuegosMenu">
     <a href="pokedle-diario.html"class="minijuego" > Classic Pokedle Diario</a>
     <a href="pokedle-infinito.html"class="minijuego" > Classic Pokedle Infinito</a>
-    <a href="adivina-pokemon-infinito.html"class="minijuego" > Adivina el pokemon Infinito</a>
+    <a href="adivina-pokemon.html"class="minijuego" > Adivina el pokemon Diario</a>
     </section>
   </div>
 </div>
@@ -87,8 +88,15 @@
     <img src="logoAdivinaElpokemon.png" width="300px">
     </div>
     <div id="contenedorTotal">
-       <div id="racha"> Racha Actual: <div id="contadorRacha"> </div> </div>
+<div id="rachas">
+<div id="racha"> Racha Actual: <div id="contadorRacha"> </div></div>
+<div id="rachaInfinita"> Mejor Racha: <div id="contadorRachaInfinita"> </div>
+</div>
+</div>
  <div class="app">
+    <div id="contenedorBoton">
+<div id="botonReiniciar"> ¡Siguiente Pokemon! </div>
+</div>
     <div class="search-container">
       <input
         type="text" 
@@ -101,6 +109,16 @@
     <div id="selected-pokemon"></div>
   </div>
   </div>
+<div id="corazones">
+<img class="corazon" src="corazonPokemon.png" alt="Corazon de vida">
+<img class="corazon" src="corazonPokemon.png" alt="Corazon de vida">
+<img class="corazon" src="corazonPokemon.png" alt="Corazon de vida">
+<img class="corazon" src="corazonPokemon.png" alt="Corazon de vida">
+<img class="corazon" src="corazonPokemon.png" alt="Corazon de vida">
+<img class="corazon" src="corazonPokemon.png" alt="Corazon de vida">
+<img class="corazon" src="corazonPokemon.png" alt="Corazon de vida">
+<img class="corazon" src="corazonPokemon.png" alt="Corazon de vida">
+</div>
   <section id="contenedorCategoriasTotal">
 <section id="contenedorCategorias" class="grid-pokemon">
   <div class="celda">Pokemon</div>
@@ -124,7 +142,7 @@
 </svg>
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script type="module" src="AdivinaPokemon.js"></script>
+  <script type= "module" src="adivinaPokemonInfinito.js"></script>
   <script src="menuMinujuegos.js"></script>
   <script src="menuInfo.js"></script>
 </body>

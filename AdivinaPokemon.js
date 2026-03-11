@@ -1,33 +1,64 @@
-let input = document.getElementById("busqueda");
+
+export let input = document.getElementById("busqueda");
+let modo;
+if(location.pathname.includes("infinito")){
+  modo="infinito"
+}
+else{
+  modo="diario";
+}
 let contenedor = document.getElementById("informacion");
 let contenedorRacha= document.getElementById("contadorRacha");
 let numeroDeRachas;
-if(localStorage.getItem("racha")){
+let corazones
+let numeroDeFallos
+if(localStorage.getItem("numeroDeFallos")){
+numeroDeFallos = fromBase64(localStorage.getItem("numeroDeFallos"))
+}
+else{
+numeroDeFallos=0;
+}
+  
+if(modo != "diario"){
+corazones = document.querySelectorAll(".corazon");
+}
+if( modo == "diario" && localStorage.getItem("racha")){
   numeroDeRachas = fromBase64(localStorage.getItem("racha"))
+}
+else if(localStorage.getItem("rachaAdivinaInfinito")){
+  numeroDeRachas = fromBase64(localStorage.getItem("rachaAdivinaInfinito"))
 }
 else{
   numeroDeRachas = 0;
-}  
+}
 let numeroDeRachaHoy = numeroDeRachas;
 contenedorRacha.textContent = numeroDeRachas;
-let allPokemon = [];
+export let allPokemon = [];
 let filteredResults = [];
 let infoPokemonSeleccionado = [];
 let infoPokemonDia = [];
 let aciertos = [];
-let pokemonUtilizados = JSON.parse(localStorage.getItem("pokemonUsadosAdivina")) || [];
+let pokemonUtilizados;
+let botonReiniciar;
+if(modo == "diario"){
+  pokemonUtilizados = JSON.parse(localStorage.getItem("pokemonUsadosAdivina")) || [];
+
+}
+else{
+  pokemonUtilizados = JSON.parse(localStorage.getItem("pokemonUsadosAdivinaInfinito")) || [];
+  botonReiniciar = document.getElementById("botonReiniciar");
+}
 let selectedIndex = 0;
 let nombrePokemonDelDia;
 let contenedorCategorias = document.getElementById("contenedorCategorias");
 let img;
 let idPokemonSeleccionado;
-let IDBIEN;
-modalHeader =  document.querySelector("#modalFinal .modal-header");
-modalEl =  document.getElementById('errorModal');
-modalFinalE2 =  document.getElementById("modalFinal");
-modalFinal = new bootstrap.Modal(modalFinalE2);
-mensajeFinal =  document.getElementById("mensajeFinal");
-tituloFinal =  document.getElementById("tituloFinal");
+let modalHeader =  document.querySelector("#modalFinal .modal-header");
+let modalEl =  document.getElementById('errorModal');
+let modalFinalE2 =  document.getElementById("modalFinal");
+let modalFinal = new bootstrap.Modal(modalFinalE2);
+let mensajeFinal =  document.getElementById("mensajeFinal");
+let tituloFinal =  document.getElementById("tituloFinal");
 let encontroPokemon = false;
 const colores = {
   black: "Negro",
@@ -68,7 +99,7 @@ const categorias = [
   return mapa[romano] || 0;
 }
 // Encriptar
-    function toBase64(str) {
+export function toBase64(str) {
     const bytes = new TextEncoder().encode(str);
     let binary = '';
     bytes.forEach((b) => binary += String.fromCharCode(b));
@@ -76,7 +107,7 @@ const categorias = [
 }
 
 // Desencriptar
-    function fromBase64(str) {
+export function fromBase64(str) {
     const binary = atob(str);
     const bytes = new Uint8Array(binary.length);
     for (let i = 0; i < binary.length; i++) {
@@ -165,7 +196,7 @@ function numeroDiario() {
     numeroDeRachas = 0;
   }
 
-  if (fechaGuardada !== hoy) {
+  if (fechaGuardada !== hoy && modo == "diario") {
     localStorage.removeItem("pokemonUsadosAdivina");
     pokemonUtilizados = [];
     let fechaEncriptada = toBase64(hoy);
@@ -266,12 +297,40 @@ async function funcionObtenerPokemonDiario() {
     return allPokemon[index].name;
   }
   async function datosPokemonDia(){
+if(modo == "diario"){
 nombrePokemonDelDia = await funcionObtenerPokemonDiario();
 infoPokemonDia = await obtenerPokemonEnEspanol(nombrePokemonDelDia);
 }
+else{
+  let nombreInfinito;
+  if(localStorage.getItem("AdivinaInfinito")){
+     nombreInfinito = fromBase64(localStorage.getItem("AdivinaInfinito"));
+  }
+  else{
+  let pokemons = [];
+    for(let x=1;x<=1028;x++){
+        pokemons[x-1]=x;
+    }
+   let pokemon = pokemons[Math.floor(Math.random() * pokemons.length)];
+   const resSpecies = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemon}`);
+   let dataSpecies = await resSpecies.json();
+   nombreInfinito = dataSpecies.name;
+  }
+     localStorage.setItem("AdivinaInfinito",toBase64(nombreInfinito));
+     infoPokemonDia = await obtenerPokemonEnEspanol(nombreInfinito);
+     nombrePokemonDelDia=nombreInfinito;
+}
+}
   async function pokemonYaUsados() {
   await datosPokemonDia();
-  const guardados = localStorage.getItem("pokemonUsadosAdivina");
+  let guardados;
+  if(modo == "diario"){
+  guardados = localStorage.getItem("pokemonUsadosAdivina");
+  }
+  else{
+    guardados = localStorage.getItem("pokemonUsadosAdivinaInfinito");
+  }
+ 
   if (!guardados){
     return;
   } 
@@ -406,8 +465,8 @@ function compararPokemon(pokemonSeleccionado,pokemonDia){
         }
        }
        else if(index == 7){
-          numero1 = romanoANumero(pokemonSeleccionado[texto.toLocaleLowerCase()]);
-          numero2 = romanoANumero(pokemonDia[texto.toLocaleLowerCase()]);
+          let numero1 = romanoANumero(pokemonSeleccionado[texto.toLocaleLowerCase()]);
+          let numero2 = romanoANumero(pokemonDia[texto.toLocaleLowerCase()]);
           if(numero1 > numero2){
             aciertos[index] = "falloPorAbajo";
           }
@@ -417,9 +476,18 @@ function compararPokemon(pokemonSeleccionado,pokemonDia){
        }
      }
   });
-
+ if(!encontroPokemon && modo != "diario"){
+        corazones[numeroDeFallos].style.filter = "grayscale(100%)";
+        corazones[numeroDeFallos].style.zIndex = "-1";
+        numeroDeFallos++;
+ }
 }
- function ContenedorInformacion(infoPokemonSeleccionado,infoPokemonDia,pokemonUsados){
+async function obtenerImgPokemon(nombre) {
+  const respuesta = await fetch(`https://pokeapi.co/api/v2/pokemon/${nombre}`);
+  const data = await respuesta.json();
+  return  `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${data.id}.png`;;
+}
+export async function ContenedorInformacion(infoPokemonSeleccionado,infoPokemonDia,pokemonUsados){
 
   // Crear el div opciones
   const opciones = document.createElement("div");
@@ -446,17 +514,28 @@ function compararPokemon(pokemonSeleccionado,pokemonDia){
     opciones.appendChild(elemento);
   });
   infoPokemonSeleccionado = []
-  if(encontroPokemon){
+  if(encontroPokemon || (modo == "infinito" && numeroDeFallos == 8)){
         const revelar = document.createElement("h4");
         revelar.textContent = "El pokemon era " + nombrePokemonDelDia.toUpperCase();
         const imgFinal = document.createElement("img");
-        imgFinal.src = img.src;
+        let nombrePokemonImagen = infoPokemonDia["pokemon"];
+        let imagen =  await obtenerImgPokemon(nombrePokemonImagen);
+        imgFinal.src = imagen;
         imgFinal.alt = nombrePokemonDelDia;
         imgFinal.style.width = "50%";
         mensajeFinal.appendChild(revelar);
         mensajeFinal.appendChild(imgFinal);
-        modalHeader.style.backgroundColor = "#0dc616";
-        tituloFinal.textContent = "Ganaste";
+        if(encontroPokemon){
+          modalHeader.style.backgroundColor = "#0dc616";
+          tituloFinal.textContent = "Ganaste";
+        }
+        else{
+          modalHeader.style.backgroundColor = "#e20b0bff";
+          tituloFinal.textContent = "Perdiste";
+          contenedorRacha.textContent = 0;
+          localStorage.removeItem("rachaAdivinaInfinito");
+          numeroDeRachas = 0;
+        }
         const contenedor = document.createElement("div");
         contenedor.id = "contador";
         contenedor.style.marginTop = "15px";
@@ -465,12 +544,39 @@ function compararPokemon(pokemonSeleccionado,pokemonDia){
         contenedor.style.textAlign = "center";
         contenedor.style.fontFamily = "pokemon";
         mensajeFinal.appendChild(contenedor);
-        iniciarContador(contenedor);
+        if(modo == "diario"){
+          iniciarContador(contenedor);
+        }
+        else{
+          localStorage.removeItem("AdivinaInfinito")
+          localStorage.removeItem("pokemonUsadosAdivinaInfinito");
+        }
         modalFinal.show();
         if(!pokemonUsados){
-        numeroDeRachas++;
-        let rachaEncriptada = toBase64(numeroDeRachas);
-        localStorage.setItem("racha",rachaEncriptada);
+        if(modo=="diario"){
+          localStorage.setItem("racha",rachaEncriptada);
+        }
+        else{
+          if(encontroPokemon){
+            numeroDeRachas++;
+            let rachaEncriptada = toBase64(numeroDeRachas);
+            localStorage.setItem("rachaAdivinaInfinito",rachaEncriptada);
+            let rachaMaxima=0;
+            if(localStorage.getItem("rachaMaximaAdivina")){
+              rachaMaxima= fromBase64(localStorage.getItem("rachaMaximaAdivina"))
+            }
+            if(numeroDeRachas > rachaMaxima){
+              localStorage.setItem("rachaMaximaAdivina", toBase64(numeroDeRachas));
+              let contenedorRachaInfinita = document.getElementById("contadorRachaInfinita");
+              contenedorRachaInfinita.textContent = numeroDeRachas;
+            }
+          }
+          botonReiniciar.style.display="block";
+          botonReiniciar.addEventListener("click",() =>{
+          location.reload();
+        })
+        }
+        
         contenedorRacha.textContent = numeroDeRachas;
         }
         input.placeholder = "¡Encontraste el pokemon!";
@@ -493,7 +599,7 @@ function normalize(text) {
 }
 
 // Filtrado
-function filterPokemon(list, value) {
+export function filterPokemon(list, value) {
 
   const search = normalize(value);
 
@@ -522,7 +628,7 @@ function actualizarSeleccion() {
   }
 }
 
-function renderVisible() {
+export function renderVisible() {
 
   const container = document.getElementById("results");
   container.innerHTML = "";
@@ -549,13 +655,20 @@ function renderVisible() {
       input.value = nombreMostrar;
       container.innerHTML = "";
 
-      infoPokemonSeleccionado =
-        await obtenerPokemonEnEspanol(pokemon.name);
+      infoPokemonSeleccionado =await obtenerPokemonEnEspanol(pokemon.name);
 
       pokemonUtilizados.push(pokemon.name);
-      localStorage.setItem("pokemonUsadosAdivina", JSON.stringify(pokemonUtilizados));
-
-      compararPokemon(infoPokemonSeleccionado, infoPokemonDia);
+      if(modo == "diario"){
+        localStorage.setItem("pokemonUsadosAdivina", JSON.stringify(pokemonUtilizados));
+      }
+      else{
+        localStorage.setItem("pokemonUsadosAdivinaInfinito",  JSON.stringify(pokemonUtilizados))
+      }
+      
+        compararPokemon(infoPokemonSeleccionado, infoPokemonDia);
+      
+      
+      
       ContenedorInformacion(infoPokemonSeleccionado, infoPokemonDia,false);
 
       input.value = "";
@@ -566,8 +679,6 @@ function renderVisible() {
 
   actualizarSeleccion();
 }
-
-
 
 
 // Cuando el usuario escribe
@@ -581,7 +692,7 @@ input.addEventListener("input", () => {
 
   filteredResults = filterPokemon(allPokemon, value);
 
-  visibleStart = 0;
+  let visibleStart = 0;
   selectedIndex = 0;
 
   renderVisible();

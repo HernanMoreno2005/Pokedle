@@ -145,7 +145,10 @@ input{
   margin: 0;
 }
 
-
+.search-container{
+  display: flex;
+  justify-content: center;
+}
 
 @media (width <= 768px){
   #opciones{

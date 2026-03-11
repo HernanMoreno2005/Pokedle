@@ -7,8 +7,12 @@
    margin-top: 4vh;
 }
 #minijuegos{
-    display: flex;
-    justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 0.22fr));
+  box-sizing: border-box; 
+  gap: 2vh;
+  justify-content: center;
+  place-items: center;
 }
 #minijuegos img{
     width: 30vh;
@@ -34,9 +38,7 @@
     border: solid black;
 }
 
-#minijuegos{
-    gap:4vh
-}
+
 @media (width <= 768px){
     #minijuegos{
         flex-direction: column;
