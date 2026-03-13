@@ -54,7 +54,6 @@ let contenedorCategorias = document.getElementById("contenedorCategorias");
 let img;
 let idPokemonSeleccionado;
 let modalHeader =  document.querySelector("#modalFinal .modal-header");
-let modalEl =  document.getElementById('errorModal');
 let modalFinalE2 =  document.getElementById("modalFinal");
 let modalFinal = new bootstrap.Modal(modalFinalE2);
 let mensajeFinal =  document.getElementById("mensajeFinal");
@@ -579,7 +578,15 @@ export async function ContenedorInformacion(infoPokemonSeleccionado,infoPokemonD
         
         contenedorRacha.textContent = numeroDeRachas;
         }
-        input.placeholder = "¡Encontraste el pokemon!";
+        if(modo=="diario"){
+          input.placeholder = "¡Encontraste el pokemon!";
+        }
+        if(modo != "diario" && encontroPokemon) {
+          input.placeholder = "¡Encontraste el pokemon!";
+        }
+        else if(modo != "diario"){
+          input.placeholder = "No encontraste el pokemon";
+        }
         input.disabled = true;
 }
 

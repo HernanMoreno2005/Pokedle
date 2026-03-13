@@ -1,0 +1,140 @@
+#imagenSilueta{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    width: 50vh;
+    border-radius: 10px;
+    border: solid black;
+    padding: 1vh;
+    font-family: pokemon;
+    text-align: center;
+    overflow: hidden;
+    gap: 2vh;
+    color: black;
+}
+
+#imagen{
+    width: 30vh;
+    height: 30vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#imagenSilueta img{
+    width: 30vh;
+    filter: brightness(0);
+    transform: scale(2.5);
+    transition: transform 0.4s;
+}
+#contenedorSilueta{
+    width: 100%;
+    justify-content: center;
+    display: flex;
+}
+#busqueda{
+    width: 27vh;
+    border-radius: 10px;
+    border: solid black;
+}
+
+.search-container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 2vh;
+    flex-direction: column;
+    align-items: center;
+}
+#results{
+  max-height: 30%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: absolute;
+  top: 75.6vh;
+  width: 30vh;
+  font-family: pokemon;
+}
+#racha,#rachaInfinita{
+    width: 24vh;
+}
+.result {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  cursor: pointer;
+  background-color: white;
+  width: 100%;
+  text-transform: capitalize;
+}
+#corazones{
+    margin-bottom: 1vh;
+}
+.result:hover,
+.result.active {
+  background: #2e2e2e;
+  color: white;
+}
+#rachas{
+    justify-content: center;
+}
+#contenedorReiniciar{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 1vh;
+}
+#botonReiniciar{
+    width: 34vh;
+}
+.result img {
+  width: 40px;
+  margin-right: 10px;
+}
+#contenedorRespuestas{
+  display: flex;
+  justify-content: center;
+  margin-top: 1vh;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 0.5vh;
+}
+.respuestas{
+    display: flex;
+    align-items: center;
+    width: 32vh;
+    height: 11vh;
+    background-color: white;
+    border-radius: 7px;
+    font-family: pokemon;
+    text-transform: capitalize;
+    color: white;
+    border: solid rgb(44, 43, 43);
+}
+
+.respuestas img{
+    width: 10vh;
+}
+.acierto{
+    background-color: #77fb77;
+}
+.fallo{
+    background-color: #bb2323;
+    
+}
+@media (width <= 768px){
+    #rachas{
+        flex-direction: row;
+    }
+    #botonReiniciar{
+        width: 37vh;
+    }
+    main{
+        padding: 3vh;
+    }
+    #imagenSilueta h1{
+      font-size: 3vh;
+    }
+}

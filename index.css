@@ -15,7 +15,6 @@
   place-items: center;
 }
 #minijuegos img{
-    width: 30vh;
     height: 6vh;
 }
     
@@ -37,7 +36,9 @@
     transform: scale(1.2);
     border: solid black;
 }
-
+#corazones img{
+    height: 4vh;
+}
 
 @media (width <= 768px){
     #minijuegos{
