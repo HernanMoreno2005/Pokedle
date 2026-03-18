@@ -2,13 +2,14 @@
   width: 100%;
   display: flex;
   justify-content: center;
+  margin-bottom: 10vh;
 }
 #imagenMiniJuegos,#minijuegos{
    margin-top: 4vh;
 }
 #minijuegos{
   display: grid;
-  grid-template-columns: repeat(3, auto);
+  grid-template-columns: repeat(2, auto);
   justify-content: center;
   gap: 2vh;
 }
@@ -18,22 +19,27 @@
 
 .minijuegoPrincipal{
     cursor: pointer;
-    background-color: white;
-    border-radius: 10px;
     display: flex;
+background-image: radial-gradient(circle, #12002e, #09072e, #030c2c, #011029, #021325);
+    border-radius: 10px;
     align-items: center;
     flex-direction: column;
-    height: 12vh;
+    height: 13vh;
     transition: transform 0.3s ease;
     width: 40vh;
     font-size: 1vh;
-    color: black;
+    color: white;
+    box-sizing: border-box;
+    border: solid #5b5b5b 0.7vh;
 }
 
 
 .minijuegoPrincipal:hover{
-    transform: scale(1.2);
-    border: solid black;
+    border: solid white 0.7vh;
+    
+}
+#corazones{
+  margin-top: 1vh;
 }
 #corazones img{
     height: 4vh;
@@ -43,7 +49,9 @@
    font-size: 2vh;
    text-shadow: 2px 2px 4px black;
 }
-
+#proximamente{
+     text-decoration: none;
+}
 @media (max-width:768px){
 
   #minijuegos{

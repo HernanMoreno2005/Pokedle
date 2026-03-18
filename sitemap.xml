@@ -8,7 +8,7 @@
 
 <url>
   <loc>https://pokedle-game.vercel.app/</loc>
-  <lastmod>2026-03-13T00:00:00+00:00</lastmod>
+  <lastmod>2026-03-18T00:00:00+00:00</lastmod>
   <changefreq>daily</changefreq>
   <priority>1.00</priority>
   <image:image>
@@ -19,7 +19,7 @@
 
 <url>
   <loc>https://pokedle-game.vercel.app/pokedle-diario</loc>
-  <lastmod>2026-03-13T00:00:00+00:00</lastmod>
+  <lastmod>2026-03-18T00:00:00+00:00</lastmod>
   <changefreq>daily</changefreq>
   <priority>0.90</priority>
   <image:image>
@@ -30,7 +30,7 @@
 
 <url>
   <loc>https://pokedle-game.vercel.app/adivina-pokemon</loc>
-  <lastmod>2026-03-13T00:00:00+00:00</lastmod>
+  <lastmod>2026-03-18T00:00:00+00:00</lastmod>
   <changefreq>daily</changefreq>
   <priority>0.90</priority>
   <image:image>
@@ -41,7 +41,7 @@
 
 <url>
   <loc>https://pokedle-game.vercel.app/adivina-pokemon-infinito</loc>
-  <lastmod>2026-03-13T00:00:00+00:00</lastmod>
+  <lastmod>2026-03-18T00:00:00+00:00</lastmod>
   <changefreq>weekly</changefreq>
   <priority>0.85</priority>
   <image:image>
@@ -52,7 +52,7 @@
 
 <url>
   <loc>https://pokedle-game.vercel.app/pokedle-infinito</loc>
-  <lastmod>2026-03-13T00:00:00+00:00</lastmod>
+  <lastmod>2026-03-18T00:00:00+00:00</lastmod>
   <changefreq>weekly</changefreq>
   <priority>0.80</priority>
   <image:image>
@@ -63,7 +63,7 @@
 
 <url>
   <loc>https://pokedle-game.vercel.app/pokedle-silueta-infinito</loc>
-  <lastmod>2026-03-13T00:00:00+00:00</lastmod>
+  <lastmod>2026-03-18T00:00:00+00:00</lastmod>
   <changefreq>weekly</changefreq>
   <priority>0.85</priority>
   <image:image>

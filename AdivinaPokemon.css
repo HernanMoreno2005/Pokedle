@@ -48,9 +48,10 @@ input{
   display: grid;
   grid-template-columns: repeat(8, minmax(0, 4fr));
   gap: 10px;
-  background-color: white;
+  background-image: url(naturaleza.webp);
+  background-position: bottom;
   width: 50%;
-  border: black solid;
+   border: solid #5b5b5b 0.7vh;
   border-radius: 10px;
   margin-top: 1%;
   padding: 15px; 
@@ -115,6 +116,9 @@ input{
 }
 .falloPorOrden{
   background-color: #adad00;
+}
+.acierto,.fallo,.falloPorArriba,.falloPorAbajo,.falloPorOrden{
+  border: solid black;
 }
 #contenedorCategorias{
     display: grid;
