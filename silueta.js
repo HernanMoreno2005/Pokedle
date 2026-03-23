@@ -275,7 +275,8 @@ async function compararPokemon(nombrePokemonSeleccionado,pokemonUtilizados){
              tituloFinal.textContent = "Perdiste";
              input.placeholder = "No encontraste el pokemon"
              input.disabled = true;
-             
+             localStorage.removeItem("pokemonInfinitoSilueta");
+             localStorage.removeItem("pokemonUsadosSiluetaInfinito");
              modalFinal.show();
              contenedorRacha.textContent = 0;
            }
